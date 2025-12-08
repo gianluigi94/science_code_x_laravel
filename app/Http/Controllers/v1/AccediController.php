@@ -45,30 +45,59 @@ class AccediController extends Controller
     }
 
 
+    // protected static function controllo_utente($utente)
+    // {
+    //     // $hashed_user = hash("sha512", trim($utente));
+    //     $sale = hash("sha512", trim(Str::random(200)));
+
+    //     if (AutenticazioneModel::esistente_utente_valido_per_login($utente)) {
+
+    //         $auth = AutenticazioneModel::where('user', $utente)->first();
+
+    //         $auth->secret_jwt = hash("sha512", trim(Str::random(200)));
+    //         $auth->inizio_sfida = date('Y-m-d H:i:s', time());
+    //         $auth->save();
+    //         $record_password = PasswordModel::password_attuale($auth->id_contatto);
+    //         $record_password->sale = $sale;
+    //         $record_password->save();
+
+    //         // $dati = array("sale" => $sale);
+    //         // return AppHelpers::risposta_custom($dati);
+    //         return AppHelpers::risposta_custom(['sale' => $sale]);
+    //     } else {
+    //         AccessoModel::aggiungi_tentativo_fallito(null);
+    //         return AppHelpers::risposta_custom(['sale' => $sale]);
+    //     }
+    // }
+
     protected static function controllo_utente($utente)
-    {
-        // $hashed_user = hash("sha512", trim($utente));
-        $sale = hash("sha512", trim(Str::random(200)));
+{
+    $sale = hash("sha512", trim(Str::random(200)));
 
-        if (AutenticazioneModel::esistente_utente_valido_per_login($utente)) {
+    if (AutenticazioneModel::esistente_utente_valido_per_login($utente)) {
 
-            $auth = AutenticazioneModel::where('user', $utente)->first();
+        $auth = AutenticazioneModel::where('user', $utente)->first();
 
+        // 🔸 secret_jwt viene generato SOLO se non esiste ancora
+        if (empty($auth->secret_jwt)) {
             $auth->secret_jwt = hash("sha512", trim(Str::random(200)));
-            $auth->inizio_sfida = date('Y-m-d H:i:s', time());
-            $auth->save();
-            $record_password = PasswordModel::password_attuale($auth->id_contatto);
-            $record_password->sale = $sale;
-            $record_password->save();
-
-            // $dati = array("sale" => $sale);
-            // return AppHelpers::risposta_custom($dati);
-            return AppHelpers::risposta_custom(['sale' => $sale]);
-        } else {
-            AccessoModel::aggiungi_tentativo_fallito(null);
-            return AppHelpers::risposta_custom(['sale' => $sale]);
         }
+
+        // la sfida può continuare a cambiare normalmente
+        $auth->inizio_sfida = date('Y-m-d H:i:s', time());
+        $auth->save();
+
+        $record_password = PasswordModel::password_attuale($auth->id_contatto);
+        $record_password->sale = $sale;
+        $record_password->save();
+
+        return AppHelpers::risposta_custom(['sale' => $sale]);
+    } else {
+        AccessoModel::aggiungi_tentativo_fallito(null);
+        return AppHelpers::risposta_custom(['sale' => $sale]);
     }
+}
+
 
     //PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD PASWORD
 
@@ -108,12 +137,8 @@ class AccediController extends Controller
 
                     if (time() <= $scadenza_pw) {
                         $tentativi = AccessoModel::conta_tentativi($auth->id_contatto);
-                        $blocco_password = $record_password->blocco_password ? strtotime($record_password->blocco_password) : null;
-                        $blocco_psw = ConfigurazioneModel::leggi_valore("blocco_psw");
-                        $scadenza_blocco_password = $blocco_password + $blocco_psw;
 
-
-                        if (($tentativi < $max_tentativi) || (($tentativi >= $max_tentativi) && ($blocco_password != null && $scadenza_blocco_password < now()->timestamp))) {
+                        if ($tentativi < $max_tentativi) {
 
                             $resta_collegato = request()->boolean('collegato', false);
                             $tk = AppHelpers::crea_token_sessione($auth->id_contatto, $secret_jwt, $resta_collegato);
@@ -170,8 +195,9 @@ class AccediController extends Controller
                     $inizio_assoluto = strtotime($sessione->created_at);
                     $max_assoluta = (int) ConfigurazioneModel::leggi_valore('termina_sessione_assoluta');
                     if (time() > ($inizio_assoluto + $max_assoluta)) {
-                        DB::table('sessioni')->where('token', $token)->update(['token' => null]);
-                        abort(403, 'ATTENZIONE:SESSIONE COLLEGATO SCADUTA (LIMITE ASSOLUTO) E TOKEN RIPORTATO A NULL');
+
+                        SessioneModel::where('token', $token)->delete();
+                        abort(403, 'ATTENZIONE:SESSIONE COLLEGATO SCADUTA (LIMITE ASSOLUTO)');
                     }
                 }
 
@@ -183,8 +209,9 @@ class AccediController extends Controller
                     $inizio_token = strtotime($inizio_token_record->inizio_token);
                     $durata_token = (int) ConfigurazioneModel::leggi_valore($resta ? 'termina_tk_collegato' : 'termina_tk_standard');
                     if (time() > ($inizio_token + $durata_token)) {
-                        DB::table('sessioni')->where('token', $token)->update(['token' => null]);
-                        abort(403, 'TOKEN SCADUTO E RIPORTATO A NULL');
+
+                        SessioneModel::where('token', $token)->delete();
+                        abort(403, 'TOKEN SCADUTO');
                     }
                 }
 
@@ -201,12 +228,13 @@ class AccediController extends Controller
                     abort(403, 'TK_0005');
                 }
             } else {
-                DB::table('sessioni')->where('token', $token)->update(['token' => null]);
+
+                SessioneModel::where('token', $token)->delete();
                 abort(
                     403,
                     $resta
-                        ? 'ATTENZIONE: SESSIONE COLLEGATA SCADUTA PER INATTIVITÀ E TOKEN RIPORTATO A NULL'
-                        : 'ATTENZIONE: SESSIONE STANDARD SCADUTA E TOKEN RIPORTATO A NULL'
+                        ? 'ATTENZIONE: SESSIONE COLLEGATA SCADUTA PER INATTIVITÀ'
+                        : 'ATTENZIONE: SESSIONE STANDARD SCADUTA'
                 );
             }
         } else {

@@ -51,9 +51,10 @@ class AggiornaTassiCambio extends Command
             ];
         }
 
-        if ($rows) {
-            DB::table('tassi_cambio')->upsert($rows, ['id_valuta'], ['tasso','updated_at']);
-        }
+      if ($rows) {
+    DB::table('tassi_cambio')->truncate();  // svuota la tabella
+    DB::table('tassi_cambio')->insert($rows); // la ripopoli da zero
+}
 
         $this->info('Aggiornati '.count($rows).' tassi.');
         return self::SUCCESS;

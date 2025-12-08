@@ -28,6 +28,8 @@ class SerieResource extends JsonResource
             'numero_episodi'   => $this->numero_episodi,
             'img_sfondo'       => $this->img_sfondo,
             'novita'           => (bool) $this->novita,
+            'created_at'        => $this->created_at
+
         ];
     }
 }

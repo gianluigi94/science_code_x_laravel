@@ -53,7 +53,7 @@ class AppHelpers
         }, $abilita);
 
         $arr = array(
-            'iss' => 'https://www.codex.it',
+            'iss' => 'https://www.sciencecodex.net',
             'aud' => null,
             'iat' => $t,
             'nbf' => $nbf,

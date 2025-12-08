@@ -26,6 +26,7 @@ class FilmResource extends JsonResource
             'img_sfondo'        => $this->img_sfondo,
             'id_streaming_file' => $this->id_streaming_file,
             'novita'            => (bool) $this->novita,
+            'created_at'        => $this->created_at
         ];
     }
 }

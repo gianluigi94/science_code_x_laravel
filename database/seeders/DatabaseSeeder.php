@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
                 CategoriaSerieSeeder::class,
                 AggiornaContatoriSerieSeeder::class,
                 CategoriaFilmSeeder::class,
-                DurataVideoSeeder::class,
+                // DurataVideoSeeder::class,
                 AliquotaSeeder::class,
 
             ]

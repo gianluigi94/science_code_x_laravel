@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\TraduzioniController;
 use App\Http\Controllers\v1\AbilitaController;
 use App\Http\Controllers\v1\AccediController;
 use App\Http\Controllers\v1\AccessoController;
@@ -33,8 +34,8 @@ use App\Http\Controllers\v1\TraduzioneController;
 use App\Http\Controllers\v1\TraduzioneCustomController;
 use App\Http\Controllers\v1\ValutaController;
 use App\Http\Controllers\v1\VTraduzioneEffettivaController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\v1\LogoutController;
 
 
 if (!defined('_VERS')) {
@@ -76,10 +77,12 @@ Route::get(_VERS . "/valute", [ValutaController::class, 'index']);
 Route::get(_VERS . "/valute/{valuta}", [ValutaController::class, 'show']);
 Route::get(_VERS . "/tassi-cambio", [TassoCambioController::class, 'index']);
 Route::get(_VERS . "/tassi-cambio/{tassocambio}", [TassoCambioController::class, 'show']);
+Route::get(_VERS . '/traduzioni-lingua/{codiceLingua}', [TraduzioniController::class, 'perLingua']);
+
 
 
 Route::middleware(['autenticazione', "contatto_ruolo:$RUOLI_UTENTI,$RUOLI_ADMIN"])->group(function () {
-
+    Route::get(_VERS . '/logout', LogoutController::class);
     Route::get(_VERS . "/categoria-serie", [CategoriaSerieController::class, 'index']);
     Route::get(_VERS . "/categoria-serie/{categoriaserie}", [CategoriaSerieController::class, 'show']);
     Route::get(_VERS . "/streaming-file", [StreamingFileController::class, 'index']);

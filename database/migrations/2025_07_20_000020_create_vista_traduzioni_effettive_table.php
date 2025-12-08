@@ -11,7 +11,7 @@ return new class extends Migration {
         DB::statement(<<<'SQL'
 CREATE VIEW v_traduzioni_effettive AS
 SELECT
-    t.id_traduzione AS id_traduzione_effettiva,  -- <— aggiunto
+    t.id_traduzione AS id_traduzione_effettiva,
     t.chiave,
     t.id_lingua,
     CASE

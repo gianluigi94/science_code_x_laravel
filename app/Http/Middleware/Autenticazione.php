@@ -9,13 +9,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\Log;
 
 
 class Autenticazione
 {
     public function handle(Request $request, Closure $next)
     {
+
+        Log::info('AUTH HEADER', [
+        'authorization' => $request->header('Authorization'),
+        'all' => $request->headers->all(),
+    ]);
+
         $token = $request->bearerToken();
 
         if (!$token) {

@@ -53,18 +53,13 @@ class SessioneModel extends Model
 
 
     public static function dati_sessione($token)
-    {
-        if (SessioneModel::esiste_sessione($token)) {
+{
+    return self::where('token', $token)->first();
+}
 
-            return SessioneModel::where('token', $token)->get()->first();
-        } else {
-            return null;
-        }
-    }
+public static function esiste_sessione($token)
+{
+    return self::where('token', $token)->exists();
+}
 
-
-    public static function esiste_sessione($token)
-    {
-        return DB::table("sessioni")->where('token', $token)->exists();
-    }
 }

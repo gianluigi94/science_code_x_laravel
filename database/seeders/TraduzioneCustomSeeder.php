@@ -14,6 +14,18 @@ class TraduzioneCustomSeeder extends Seeder
     public function run(): void
     {
         TraduzioneCustomModel::create([
+            'chiave' => 'ui.main.sottotitolo',
+            'id_lingua' => 1,
+            'valore' => 'Documentari <em>scientifici</em>… per menti curiose',
+        ]);
+
+        TraduzioneCustomModel::create([
+            'chiave' => 'ui.main.sottotitolo',
+            'id_lingua' => 2,
+            'valore' => 'Scientific <em>documentaries</em>… for curious minds',
+        ]);
+
+        TraduzioneCustomModel::create([
             'chiave' => 'ui.carosello.prev_btn.title',
             'id_lingua' => 1,
             'valore' => 'Vedi la locandina precedente',
