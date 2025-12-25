@@ -21,7 +21,11 @@ class FilmTraduzioneResource extends JsonResource
             'id_film_traduzione' => $this->id_film_traduzione,
             'id_film'            => $this->id_film,
             'id_lingua'          => $this->id_lingua,
-            'titolo'             => $this->titolo,
+
+            // 👇 NOVITÀ: separiamo immagine titolo e testo titolo
+            'img_titolo'         => $this->img_titolo,  // path immagine (ex "titolo")
+            'titolo'             => $this->titolo,      // testo (dal campo "titolo" del JSON)
+
             'sottotitolo'        => $this->sottotitolo,
             'trailer'            => $this->trailer,
             'descrizione'        => $this->descrizione,

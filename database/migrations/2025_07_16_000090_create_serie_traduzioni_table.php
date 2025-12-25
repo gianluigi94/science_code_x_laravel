@@ -13,7 +13,11 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_serie');
             $table->unsignedBigInteger('id_lingua');
 
-            $table->string('titolo', 255);
+            // PRIMA: $table->string('titolo', 255);
+            // ORA: separiamo immagine titolo vs testo titolo
+            $table->string('img_titolo', 255)->nullable(); // path immagine titolo
+            $table->string('titolo', 255);                  // testo del titolo
+
             $table->string('sottotitolo', 255)->nullable();
             $table->string('trailer', 512)->nullable();       // URL trailer localizzato
             $table->text('descrizione')->nullable();

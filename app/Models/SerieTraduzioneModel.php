@@ -16,7 +16,11 @@ class SerieTraduzioneModel extends Model
     protected $fillable = [
         'id_serie',
         'id_lingua',
-        'titolo',
+
+        // 👇 separazione immagine titolo / testo titolo
+        'img_titolo',   // path immagine titolo
+        'titolo',       // testo del titolo
+
         'sottotitolo',
         'trailer',
         'descrizione',
@@ -27,6 +31,7 @@ class SerieTraduzioneModel extends Model
     {
         return $this->belongsTo(SerieModel::class, 'id_serie', 'id_serie');
     }
+
     public function lingua()
     {
         return $this->belongsTo(LinguaModel::class, 'id_lingua', 'id_lingua');

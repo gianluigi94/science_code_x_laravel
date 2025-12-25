@@ -13,7 +13,11 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_film');
             $table->unsignedBigInteger('id_lingua');
 
-            $table->string('titolo', 255);
+            // 👇 PRIMA c'era solo "titolo"
+            //    ORA: img_titolo (immagine) + titolo (testo)
+            $table->string('img_titolo', 255)->nullable(); // es: "assets/titoli_en/titolo_en_noi_non_siamo_soli.webp"
+            $table->string('titolo', 255);                  // es: "Are We Not Alone?"
+
             $table->string('sottotitolo', 255)->nullable();
             $table->string('trailer', 512)->nullable();
             $table->text('descrizione')->nullable();

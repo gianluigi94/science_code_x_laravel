@@ -2,13 +2,17 @@
 
 namespace App\Helpers;
 
-use App\Models\AutenticazioneModel;
 use App\Models\ConfigurazioneModel;
 use App\Models\ContattoModel;
 use App\Models\SessioneModel;
 use Illuminate\Support\Arr;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\DB;
+use Firebase\JWT\Key;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
+use Firebase\JWT\BeforeValidException;
+use UnexpectedValueException;
 
 class AppHelpers
 {
@@ -80,20 +84,38 @@ class AppHelpers
 
 
 
-    public static function valida_token($token, $secret_jwt, $sessione)
-    {
-        $rit = null;
+   public static function valida_token($token, $secret_jwt, $sessione)
+{
+    $rit = null;
 
-        $payload = JWT::decode($token, new \Firebase\JWT\Key($secret_jwt, 'HS256'));
+    try {
+        $payload = JWT::decode($token, new Key($secret_jwt, 'HS256'));
+    } catch (ExpiredException $e) {
+        // opzionale: se vuoi pulire la sessione quando scade il JWT
+        try { SessioneModel::where('token', $token)->delete(); } catch (\Throwable $t) {}
 
-
-        if ($payload->iat <= strtotime($sessione->updated_at)) {
-            if ($payload->data->id_contatto == $sessione->id_contatto) {
-                $rit = $payload;
-            }
-        }
-        return $rit;
+        // IMPORTANTISSIMO: non 500
+        abort(401, 'TOKEN SCADUTO');
+    } catch (SignatureInvalidException $e) {
+        abort(403, 'TOKEN NON VALIDO (FIRMA)');
+    } catch (BeforeValidException $e) {
+        abort(403, 'TOKEN NON ANCORA VALIDO');
+    } catch (UnexpectedValueException $e) {
+        abort(403, 'TOKEN NON VALIDO');
+    } catch (\Throwable $e) {
+        // fallback: qualunque altra cosa, sempre non-500
+        abort(403, 'TOKEN NON VALIDO');
     }
+
+    if ($payload->iat <= strtotime($sessione->updated_at)) {
+        if ($payload->data->id_contatto == $sessione->id_contatto) {
+            $rit = $payload;
+        }
+    }
+
+    return $rit;
+}
+
 
     /**
      * riavvia inizio_sessione dell'utente nelle rotte aperte.

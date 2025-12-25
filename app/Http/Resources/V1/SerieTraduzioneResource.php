@@ -21,7 +21,11 @@ class SerieTraduzioneResource extends JsonResource
             'id_serie_traduzione' => $this->id_serie_traduzione,
             'id_serie'            => $this->id_serie,
             'id_lingua'           => $this->id_lingua,
+
+            // 👇 come per i film: img_titolo (immagine) + titolo (testo)
+            'img_titolo'          => $this->img_titolo,
             'titolo'              => $this->titolo,
+
             'sottotitolo'         => $this->sottotitolo,
             'trailer'             => $this->trailer,
             'descrizione'         => $this->descrizione,

@@ -36,7 +36,7 @@ use App\Http\Controllers\v1\ValutaController;
 use App\Http\Controllers\v1\VTraduzioneEffettivaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\v1\LogoutController;
-
+use App\Http\Controllers\v1\VnovitaController;
 
 if (!defined('_VERS')) {
     define('_VERS', 'v1');
@@ -78,11 +78,13 @@ Route::get(_VERS . "/valute/{valuta}", [ValutaController::class, 'show']);
 Route::get(_VERS . "/tassi-cambio", [TassoCambioController::class, 'index']);
 Route::get(_VERS . "/tassi-cambio/{tassocambio}", [TassoCambioController::class, 'show']);
 Route::get(_VERS . '/traduzioni-lingua/{codiceLingua}', [TraduzioniController::class, 'perLingua']);
+Route::get(_VERS . '/logout', LogoutController::class);
 
 
 
 Route::middleware(['autenticazione', "contatto_ruolo:$RUOLI_UTENTI,$RUOLI_ADMIN"])->group(function () {
-    Route::get(_VERS . '/logout', LogoutController::class);
+    Route::get(_VERS . '/novita', [VnovitaController::class, 'index']);
+    Route::get(_VERS . '/novita/{indice}', [VnovitaController::class, 'show']);
     Route::get(_VERS . "/categoria-serie", [CategoriaSerieController::class, 'index']);
     Route::get(_VERS . "/categoria-serie/{categoriaserie}", [CategoriaSerieController::class, 'show']);
     Route::get(_VERS . "/streaming-file", [StreamingFileController::class, 'index']);
@@ -102,10 +104,10 @@ Route::middleware(['autenticazione', "contatto_ruolo:$RUOLI_UTENTI,$RUOLI_ADMIN"
     Route::get(_VERS . "/film-traduzioni", [FilmTraduzioneController::class, 'index']);
     Route::get(_VERS . "/film-traduzioni/{filmtraduzione}", [FilmTraduzioneController::class, 'show']);
 
+
     Route::get(_VERS . "/recapiti/{recapito}", [RecapitoController::class, 'show']); // u +
     Route::get(_VERS . "/contatti/{contatto}", [ContattoController::class, 'show']); // u +
     Route::get(_VERS . "/indirizzi/{indirizzo}", [IndirizzoController::class, 'show']);
-
 });
 
 
@@ -127,5 +129,4 @@ Route::middleware(['autenticazione', 'contatto_ruolo:amministratore_principale']
     Route::get(_VERS . "/abilita/{abilita}", [AbilitaController::class, 'show']);
     Route::get(_VERS . "/configurazioni", [ConfigurazioneController::class, 'index']);
     Route::get(_VERS . "/configurazioni/{configurazione}", [ConfigurazioneController::class, 'show']);
-
 });

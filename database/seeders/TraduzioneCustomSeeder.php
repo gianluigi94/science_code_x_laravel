@@ -25,25 +25,25 @@ class TraduzioneCustomSeeder extends Seeder
             'valore' => 'Scientific <em>documentaries</em>… for curious minds',
         ]);
 
-        TraduzioneCustomModel::create([
-            'chiave' => 'ui.carosello.prev_btn.title',
+         TraduzioneCustomModel::create([
+            'chiave'    => 'ui.carosello.prev_btn.title',
             'id_lingua' => 1,
-            'valore' => 'Vedi la locandina precedente',
+            'valore'    => 'Vedi la locandina precedente: "{{titolo}}"',
         ]);
         TraduzioneCustomModel::create([
-            'chiave' => 'ui.carosello.prev_btn.title',
+            'chiave'    => 'ui.carosello.prev_btn.title',
             'id_lingua' => 2,
-            'valore' => 'See the previous slide',
+            'valore'    => 'See the previous slide: "{{titolo}}"',
         ]);
         TraduzioneCustomModel::create([
-            'chiave' => 'ui.carosello.next_btn.title',
+            'chiave'    => 'ui.carosello.next_btn.title',
             'id_lingua' => 1,
-            'valore' => 'Vedi la prossima locandina',
+            'valore'    => 'Vedi la prossima locandina: "{{titolo}}"',
         ]);
         TraduzioneCustomModel::create([
-            'chiave' => 'ui.carosello.next_btn.title',
+            'chiave'    => 'ui.carosello.next_btn.title',
             'id_lingua' => 2,
-            'valore' => 'See the next slide',
+            'valore'    => 'See the next slide: "{{titolo}}"',
         ]);
         TraduzioneCustomModel::create([
             'chiave' => 'ui.carosello.novita.label',

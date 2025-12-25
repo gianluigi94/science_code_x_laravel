@@ -22,17 +22,27 @@ class FilmTraduzioneSeeder extends Seeder
 
         foreach (FilmModel::all() as $film) {
             $slug = preg_replace('/^film\./i', '', trim((string) $film->descrizione));
-            if ($slug === '') continue;
+            if ($slug === '') {
+                continue;
+            }
 
             foreach ($lingue as $meta) {
                 $video = $meta['data']['VIDEO'] ?? $meta['data']['video'] ?? [];
                 $entry = $video[$slug] ?? null;
-                if (!$entry) continue;
+                if (!$entry) {
+                    continue;
+                }
 
                 FilmTraduzioneModel::updateOrCreate(
-                    ['id_film' => $film->id_film, 'id_lingua' => $meta['id']],
                     [
-                        'titolo'        => $entry['img_titolo']    ?? $entry['img_title']   ?? null,
+                        'id_film'   => $film->id_film,
+                        'id_lingua' => $meta['id'],
+                    ],
+                    [
+                        // 👇 NUOVO: separazione immagine titolo / testo titolo
+                        'img_titolo'    => $entry['img_titolo']    ?? $entry['img_title']   ?? null,
+                        'titolo'        => $entry['titolo']        ?? null,
+
                         'sottotitolo'   => $entry['sottotitolo']   ?? $entry['subtitle']    ?? null,
                         'trailer'       => $entry['video_trailer'] ?? $entry['trailer']     ?? null,
                         'descrizione'   => $entry['intro']         ?? $entry['descrizione'] ?? null,
@@ -46,7 +56,10 @@ class FilmTraduzioneSeeder extends Seeder
     protected function loadJson(string $lang): array
     {
         $path = storage_path("app/json_db/{$lang}.json");
-        if (!File::exists($path)) return [];
+        if (!File::exists($path)) {
+            return [];
+        }
+
         $data = json_decode(File::get($path), true);
         return is_array($data) ? $data : [];
     }

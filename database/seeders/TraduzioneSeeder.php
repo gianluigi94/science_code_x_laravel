@@ -106,22 +106,22 @@ class TraduzioneSeeder extends Seeder
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.slide_tooltip.title',
             'id_lingua' => 1,
-            'valore' => 'Vai a “{{title}}»',
+            'valore' => 'Vai alla pagina "{{titolo}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.slide_tooltip.title',
             'id_lingua' => 2,
-            'valore' => 'Go to “{{title}}»',
+            'valore' => 'Go to page "{{titolo}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.slide.label',
             'id_lingua' => 1,
-            'valore' => 'Vai alla slide {{n}}',
+            'valore' => 'Vai alla slide "{{titolo}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.slide.label',
             'id_lingua' => 2,
-            'valore' => 'Go to slide {{n}}',
+            'valore' => 'Go to slide "{{titolo}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.video.error',
@@ -293,6 +293,16 @@ class TraduzioneSeeder extends Seeder
             'chiave' => 'ui.menu_utente.scollegati.label',
             'id_lingua' => 2,
             'valore' => 'log out',
+        ]);
+        TraduzioneModel::create([
+            'chiave' => 'ui.menu_utente.collegati.riuscito',
+            'id_lingua' => 1,
+            'valore' => 'Accesso avvenuto con SUCCESSO',
+        ]);
+        TraduzioneModel::create([
+            'chiave' => 'ui.menu_utente.collegati.riuscito',
+            'id_lingua' => 2,
+            'valore' => 'Login SUCCESSFUL',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.menu_utente.collegati.label',
@@ -786,72 +796,94 @@ class TraduzioneSeeder extends Seeder
 
 
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.bentornato',
-                'id_lingua' => 1,
-                'valore'    => '\nBENTORNATO!\n\nLa tua precedente sessione è scaduta,\nripeti l\'accesso e riprendi la visione dei tuoi contenuti preferiti\n\n',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.bentornato',
+            'id_lingua' => 1,
+            'valore'    => '\nBENTORNATO!\n\nLa tua precedente sessione è scaduta,\nripeti l\'accesso e riprendi la visione dei tuoi contenuti preferiti\n\n',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.bentornato',
-                'id_lingua' => 2,
-                'valore'    => '\nWELCOME BACK!\n\nYour previous session has expired,\nplease sign in again to resume watching your favorite content\n\n',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.bentornato',
+            'id_lingua' => 2,
+            'valore'    => '\nWELCOME BACK!\n\nYour previous session has expired,\nplease sign in again to resume watching your favorite content\n\n',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.scollegato',
-                'id_lingua' => 1,
-                'valore'    => 'La sessione che non hai collegato in fase di accesso è scaduta.',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.scollegato',
+            'id_lingua' => 1,
+            'valore'    => 'La sessione che non hai collegato in fase di accesso è scaduta.',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.scollegato',
-                'id_lingua' => 2,
-                'valore'    => 'The session you did not link during sign-in has expired.',
-            ]);
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.collegato',
-                'id_lingua' => 1,
-                'valore'    => 'La sessione che avevi collegato in fase di accesso è scaduta.',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.scollegato',
+            'id_lingua' => 2,
+            'valore'    => 'The session you did not link during sign-in has expired.',
+        ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.collegato',
+            'id_lingua' => 1,
+            'valore'    => 'La sessione che avevi collegato in fase di accesso è scaduta.',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.collegato',
-                'id_lingua' => 2,
-                'valore'    => 'The session you linked during sign-in has expired.',
-            ]);
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.inattivita',
-                'id_lingua' => 1,
-                'valore'    => 'La tua sessione è scaduta per inattivita.',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.collegato',
+            'id_lingua' => 2,
+            'valore'    => 'The session you linked during sign-in has expired.',
+        ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.inattivita',
+            'id_lingua' => 1,
+            'valore'    => 'La tua sessione è scaduta per inattivita.',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.inattivita',
-                'id_lingua' => 2,
-                'valore'    => 'Your session has expired due to inactivity.',
-            ]);
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.generico',
-                'id_lingua' => 1,
-                'valore'    => 'La tua sessione è scaduta.',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.inattivita',
+            'id_lingua' => 2,
+            'valore'    => 'Your session has expired due to inactivity.',
+        ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.generico',
+            'id_lingua' => 1,
+            'valore'    => 'La tua sessione è scaduta.',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.generico',
-                'id_lingua' => 2,
-                'valore'    => 'Your session has expired.',
-            ]);
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.link',
-                'id_lingua' => 1,
-                'valore'    => 'Ripeti l\'accesso',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.generico',
+            'id_lingua' => 2,
+            'valore'    => 'Your session has expired.',
+        ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.link',
+            'id_lingua' => 1,
+            'valore'    => 'Ripeti l\'accesso',
+        ]);
 
-            TraduzioneModel::create([
-                'chiave'    => 'ui.toast.sessione.link',
-                'id_lingua' => 2,
-                'valore'    => 'Repeat sign in',
-            ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.toast.sessione.link',
+            'id_lingua' => 2,
+            'valore'    => 'Repeat sign in',
+        ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.carosello.altSfondo',
+            'id_lingua' => 1,
+            'valore'    => 'Sfondo di "{{titolo}}"',
+        ]);
+
+        TraduzioneModel::create([
+            'chiave'    => 'ui.carosello.altSfondo',
+            'id_lingua' => 2,
+            'valore'    => 'Background of "{{titolo}}"',
+        ]);
+        TraduzioneModel::create([
+            'chiave'    => 'ui.carosello.altTitolo',
+            'id_lingua' => 1,
+            'valore'    => 'Immagine del titolo di "{{titolo}}"',
+        ]);
+
+        TraduzioneModel::create([
+            'chiave'    => 'ui.carosello.altTitolo',
+            'id_lingua' => 2,
+            'valore'    => 'Title image of "{{titolo}}"',
+        ]);
     }
 }

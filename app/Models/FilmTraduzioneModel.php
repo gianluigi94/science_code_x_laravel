@@ -16,7 +16,11 @@ class FilmTraduzioneModel extends Model
     protected $fillable = [
         'id_film',
         'id_lingua',
-        'titolo',
+
+        // 👇 ora separati
+        'img_titolo',   // path immagine titolo
+        'titolo',       // testo del titolo
+
         'sottotitolo',
         'trailer',
         'descrizione',
@@ -27,6 +31,7 @@ class FilmTraduzioneModel extends Model
     {
         return $this->belongsTo(FilmModel::class, 'id_film', 'id_film');
     }
+
     public function lingua()
     {
         return $this->belongsTo(LinguaModel::class, 'id_lingua', 'id_lingua');

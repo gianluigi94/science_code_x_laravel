@@ -14,7 +14,7 @@ class ContattoSeeder extends Seeder
     public function run(): void
     {
         ContattoModel::create([
-            'nome' => 'Mario',
+            'nome' => 'Luca',
             'cognome' => 'Rossi',
             'sesso' => 0,
             'codice_fiscale' => 'RSSMRA80A01F205X',
