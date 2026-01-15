@@ -7,6 +7,11 @@ use Illuminate\Database\Seeder;
 
 class AbilitaSeeder extends Seeder
 {
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
     public function run(): void
     {
         AbilitaModel::create(['nome' => 'visualizzare_media',       'sku' => 'visualizzare_media']);

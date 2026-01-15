@@ -6,57 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\CollectionEstesa;
 use App\Http\Resources\V1\SerieResource;
 use App\Models\SerieModel;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class SerieController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le serie (solo "visualizzare_media").
+     *
+     * @return CollectionEstesa
      */
     public function index()
-{
-    if (Gate::allows('abilita', 'visualizzare_media')) {
-        $risorsa = SerieModel::all();
-        return new CollectionEstesa($risorsa, SerieResource::class);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
-}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
     {
-        //
+        if (Gate::allows('abilita', 'visualizzare_media')) {
+            $risorsa = SerieModel::all();
+            return new CollectionEstesa($risorsa, SerieResource::class);
+        }
+
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
     }
 
+
     /**
-     * Display the specified resource.
+     * Mostra una singola serie (solo "visualizzare_media").
+     *
+     * @param SerieModel $serie
+     * @return SerieResource
      */
     public function show(SerieModel $serie)
-{
-    if (Gate::allows('abilita', 'visualizzare_media')) {
-        return new SerieResource($serie);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
-}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
     {
-        //
-    }
+        if (Gate::allows('abilita', 'visualizzare_media')) {
+            return new SerieResource($serie);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
     }
 }

@@ -11,9 +11,10 @@ class AutenticazioneModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'autenticazioni';
-    protected $primaryKey = 'id_autenticazione';
+    protected $table = 'autenticazioni'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_autenticazione'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'id_contatto',
         'user',
@@ -22,13 +23,25 @@ class AutenticazioneModel extends Model
         'inizio_token'
     ];
 
+    /**
+     * Relazione: l'autenticazione appartiene a un contatto.
+     *
+     * @return BelongsTo
+     */
     public function contatto()
     {
         return $this->belongsTo(ContattoModel::class, 'id_contatto', 'id_contatto');
     }
 
 
-      public static function esistente_utente_valido_per_login($user)
+
+    /**
+     * Verifica se l'utente esiste ed è abilitato al login (se bannato abort 403).
+     *
+     * @param string $user
+     * @return bool
+     */
+    public static function esistente_utente_valido_per_login($user)
     {
         $utente = DB::table('contatti')
             ->join('autenticazioni', 'contatti.id_contatto', '=', 'autenticazioni.id_contatto')
@@ -37,7 +50,7 @@ class AutenticazioneModel extends Model
             ->first();
 
         if ($utente && $utente->id_stato_utente != 1) {
-            abort(403, "ATTENZIONE: UTENTE BANNATO NON HAI PIU' I PERMESSI PER ACCEDERE" );
+            abort(403, "ATTENZIONE: UTENTE BANNATO NON HAI PIU' I PERMESSI PER ACCEDERE");
         }
 
         return ($utente && $utente->id_stato_utente == 1) ? true : false;

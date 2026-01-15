@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crea la tabella con i suoi relativi campi.
+     *
+     * @return void
      */
     public function up(): void
     {
@@ -17,13 +19,17 @@ return new class extends Migration
             $table->unsignedBigInteger('id_ruolo');
             $table->timestamps();
 
-            $table->foreign('id_contatto')->references('id_contatto')->on('contatti')->cascadeOnDelete();
-            $table->foreign('id_ruolo')->references('id_ruolo')->on('ruoli')->cascadeOnDelete();
+            $table->foreign('id_contatto')->references('id_contatto')->on('contatti')->cascadeOnDelete();// Collego il contatto e faccio eliminare automaticamente i record collegati quando il contatto viene cancellato
+
+            $table->foreign('id_ruolo')->references('id_ruolo')->on('ruoli')->cascadeOnDelete();// Collego il ruolo alla tabella dei ruoli e faccio eliminare automaticamente i record collegati quando il ruolo viene cancellato
+
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
      */
     public function down(): void
     {

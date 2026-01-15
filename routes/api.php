@@ -37,6 +37,8 @@ use App\Http\Controllers\v1\VTraduzioneEffettivaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\v1\LogoutController;
 use App\Http\Controllers\v1\VnovitaController;
+use App\Http\Controllers\v1\VcategorieLocandineController;
+
 
 if (!defined('_VERS')) {
     define('_VERS', 'v1');
@@ -65,10 +67,6 @@ Route::get(_VERS . "/traduzioni-custom", [TraduzioneCustomController::class, 'in
 Route::get(_VERS . "/traduzioni-custom/{traduzionecustom}", [TraduzioneCustomController::class, 'show']);
 Route::get(_VERS . "/traduzioni-effettive", [VTraduzioneEffettivaController::class, 'index']);
 Route::get(_VERS . "/traduzioni-effettive/{traduzioneeffettiva}", [VTraduzioneEffettivaController::class, 'show']);
-Route::get(_VERS . "/categorie", [CategoriaController::class, 'index']);
-Route::get(_VERS . "/categorie/{categoria}", [CategoriaController::class, 'show']);
-Route::get(_VERS . "/categorie-traduzioni", [CategoriaTraduzioneController::class, 'index']);
-Route::get(_VERS . "/categorie-traduzioni/{categoriatraduzione}", [CategoriaTraduzioneController::class, 'show']);
 Route::get(_VERS . "/registi", [RegistaController::class, 'index']);
 Route::get(_VERS . "/registi/{regista}", [RegistaController::class, 'show']);
 Route::get(_VERS . "/aliquote", [AliquotaController::class, 'index']);
@@ -78,7 +76,8 @@ Route::get(_VERS . "/valute/{valuta}", [ValutaController::class, 'show']);
 Route::get(_VERS . "/tassi-cambio", [TassoCambioController::class, 'index']);
 Route::get(_VERS . "/tassi-cambio/{tassocambio}", [TassoCambioController::class, 'show']);
 Route::get(_VERS . '/traduzioni-lingua/{codiceLingua}', [TraduzioniController::class, 'perLingua']);
-Route::get(_VERS . '/logout', LogoutController::class);
+Route::get(_VERS . '/logout', [LogoutController::class, 'logout']);
+
 
 
 
@@ -103,7 +102,12 @@ Route::middleware(['autenticazione', "contatto_ruolo:$RUOLI_UTENTI,$RUOLI_ADMIN"
     Route::get(_VERS . "/film/{film}", [FilmController::class, 'show']);
     Route::get(_VERS . "/film-traduzioni", [FilmTraduzioneController::class, 'index']);
     Route::get(_VERS . "/film-traduzioni/{filmtraduzione}", [FilmTraduzioneController::class, 'show']);
-
+    Route::get(_VERS . "/categorie", [CategoriaController::class, 'index']);
+    Route::get(_VERS . "/categorie/{categoria}", [CategoriaController::class, 'show']);
+    Route::get(_VERS . "/categorie-traduzioni", [CategoriaTraduzioneController::class, 'index']);
+    Route::get(_VERS . "/categorie-traduzioni/{categoriatraduzione}", [CategoriaTraduzioneController::class, 'show']);
+    Route::get(_VERS . "/categorie-locandine", [VcategorieLocandineController::class, 'index']);
+    Route::get(_VERS . "/categorie-locandine/{indice}", [VcategorieLocandineController::class, 'show']);
 
     Route::get(_VERS . "/recapiti/{recapito}", [RecapitoController::class, 'show']); // u +
     Route::get(_VERS . "/contatti/{contatto}", [ContattoController::class, 'show']); // u +

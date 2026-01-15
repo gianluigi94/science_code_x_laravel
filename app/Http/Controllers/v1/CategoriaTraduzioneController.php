@@ -12,48 +12,31 @@ use Illuminate\Http\Request;
 class CategoriaTraduzioneController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le traduzioni categoria .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
 
         $risorsa = CategoriaTraduzioneModel::all();
-       return new CollectionEstesa($risorsa, CategoriaTraduzioneResource::class);
+        return new CollectionEstesa($risorsa, CategoriaTraduzioneResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra una singola traduzione categoria .
+     *
+     * @param Request $request
+     * @param CategoriaTraduzioneModel $categoriatraduzione
+     * @return CategoriaTraduzioneResource
      */
     public function show(Request $request, CategoriaTraduzioneModel $categoriatraduzione)
     {
-        AppHelpers::gestisci_sessione($request);
 
         $risorsa = new CategoriaTraduzioneResource($categoriatraduzione);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

@@ -4,9 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
+
+    /**
+     * Crea la vista `v_traduzioni_con_custom`.
+     *
+     * La vista unisce le traduzioni "base" (`traduzioni`) con eventuali override
+     * definiti in `traduzioni_custom` per la stessa coppia (chiave, lingua).
+     *
+     * Per ogni traduzione base espone:
+     * - `valore_base` (sempre presente),
+     * - `valore_custom` e i relativi metadati (se esiste un override non soft-deleted),
+     * - il flag `ha_custom` (1 se l'override esiste, altrimenti 0),
+     * - i timestamp di creazione/aggiornamento sia della base che del custom.
+     *
+     * Usa LEFT JOIN per mantenere tutte le traduzioni base anche quando non
+     * esiste una versione custom. Sono esclusi i record soft-deleted
+     * sia per la base che per il custom.
+     *
+     * @return void
+     */
     public function up(): void
     {
-        // Idempotenza: in caso di deploy multipli
+
         DB::statement('DROP VIEW IF EXISTS v_traduzioni_con_custom');
 
         DB::statement(<<<'SQL'
@@ -32,6 +51,11 @@ WHERE t.deleted_at IS NULL
 SQL);
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         DB::statement('DROP VIEW IF EXISTS v_traduzioni_con_custom');

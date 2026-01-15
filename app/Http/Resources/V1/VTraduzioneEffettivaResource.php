@@ -8,6 +8,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class VTraduzioneEffettivaResource extends JsonResource
 {
     /**
+     * Converte la risorsa Abilita in array JSON.
+     *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -18,7 +21,7 @@ class VTraduzioneEffettivaResource extends JsonResource
     protected function get_campi(): array
     {
         return [
-            'id_traduzione_effettiva' => $this->id_traduzione_effettiva, // "1:ui.scheda.anno.label"
+            'id_traduzione_effettiva' => $this->id_traduzione_effettiva,
             'chiave' => $this->chiave,
             'id_lingua' => $this->id_lingua,
             'valore' => $this->valore,

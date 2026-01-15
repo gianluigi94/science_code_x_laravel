@@ -8,15 +8,20 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class TipoRecapitoResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Converte la risorsa Abilita in array JSON.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return $this->get_campi();
     }
-     protected function get_campi()
+
+    /**
+     * Definisce i campi da includere nella risposta JSON.
+     */
+    protected function get_campi()
     {
         return [
             'id_tipo_recapito' => $this->id_tipo_recapito,

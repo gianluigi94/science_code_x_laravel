@@ -10,9 +10,10 @@ class CategoriaSerieModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'categoria_serie';
-    protected $primaryKey = 'id_categoria_serie';
+    protected $table = 'categoria_serie'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_categoria_serie'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'id_categoria',
         'id_serie',

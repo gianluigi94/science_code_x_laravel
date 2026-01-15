@@ -8,8 +8,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ComuneResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Converte la risorsa Abilita in array JSON.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -18,7 +19,10 @@ class ComuneResource extends JsonResource
     }
 
 
-     protected function get_campi()
+    /**
+     * Definisce i campi da includere nella risposta JSON.
+     */
+    protected function get_campi()
     {
         return [
             'id_comune' => $this->id_comune,
@@ -36,5 +40,4 @@ class ComuneResource extends JsonResource
 
         ];
     }
-
 }

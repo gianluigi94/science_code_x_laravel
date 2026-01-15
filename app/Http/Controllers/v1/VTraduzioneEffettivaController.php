@@ -12,46 +12,29 @@ use Illuminate\Http\Request;
 class VTraduzioneEffettivaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le traduzioni effettive (vista) .
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return CollectionEstesa
      */
-     public function index(Request $request)
+    public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = VTraduzioneEffettivaModel::all();
         return new CollectionEstesa($risorsa, VTraduzioneEffettivaResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra una singola traduzione effettiva (vista) .
+     *
+     * @param Request $request
+     * @param VTraduzioneEffettivaModel $traduzioneeffettiva
+     * @return VTraduzioneEffettivaResource
      */
-     public function show(Request $request, VTraduzioneEffettivaModel $traduzioneeffettiva)
+    public function show(Request $request, VTraduzioneEffettivaModel $traduzioneeffettiva)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = new VTraduzioneEffettivaResource($traduzioneeffettiva);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

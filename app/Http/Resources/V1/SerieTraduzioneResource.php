@@ -8,6 +8,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class SerieTraduzioneResource extends JsonResource
 {
     /**
+     * Converte la risorsa Abilita in array JSON.
+     *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -15,6 +18,9 @@ class SerieTraduzioneResource extends JsonResource
         return $this->get_campi();
     }
 
+    /**
+     * Definisce i campi da includere nella risposta JSON.
+     */
     protected function get_campi()
     {
         return [
@@ -22,7 +28,6 @@ class SerieTraduzioneResource extends JsonResource
             'id_serie'            => $this->id_serie,
             'id_lingua'           => $this->id_lingua,
 
-            // 👇 come per i film: img_titolo (immagine) + titolo (testo)
             'img_titolo'          => $this->img_titolo,
             'titolo'              => $this->titolo,
 

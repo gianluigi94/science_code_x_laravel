@@ -12,51 +12,33 @@ use Illuminate\Support\Facades\Gate;
 class StagioneController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le stagioni (solo "visualizzare_media").
+     *
+     * @return CollectionEstesa
      */
-     public function index()
-{
-    if (Gate::allows('abilita', 'visualizzare_media')) {
-        $risorsa = StagioneModel::all();
-        return new CollectionEstesa($risorsa, StagioneResource::class);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
-}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function index()
     {
-        //
+        if (Gate::allows('abilita', 'visualizzare_media')) {
+            $risorsa = StagioneModel::all();
+            return new CollectionEstesa($risorsa, StagioneResource::class);
+        }
+
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
     }
 
-    /**
-     * Display the specified resource.
-     */
-   public function show(StagioneModel $stagione)
-{
-    if (Gate::allows('abilita', 'visualizzare_media')) {
-        return new StagioneResource($stagione);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
-}
 
     /**
-     * Update the specified resource in storage.
+     * Mostra una singola stagione (solo "visualizzare_media").
+     *
+     * @param StagioneModel $stagione
+     * @return StagioneResource
      */
-    public function update(Request $request, string $id)
+    public function show(StagioneModel $stagione)
     {
-        //
-    }
+        if (Gate::allows('abilita', 'visualizzare_media')) {
+            return new StagioneResource($stagione);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
     }
 }

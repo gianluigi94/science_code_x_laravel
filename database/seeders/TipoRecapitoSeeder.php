@@ -3,13 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\TipoRecapitoModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TipoRecapitoSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
      */
     public function run(): void
     {

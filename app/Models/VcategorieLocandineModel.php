@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VnovitaModel extends Model
+class VcategorieLocandineModel extends Model
 {
-    protected $table = 'vista_novita'; //Nome della vista associata al modello
+    protected $table = 'vista_categorie_locandine'; //Nome della vista associata al modello
 
     public $timestamps = false;
     protected $primaryKey = null;
@@ -14,11 +14,10 @@ class VnovitaModel extends Model
 
     //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
-        'descrizione',
-        'titolo',
-        'img_titolo',
-        'sottotitolo',
-        'trailer',
+        'id_categoria',
+                'tipo',
+       'id_contenuto',
+        'img_locandina',
         'lingua',
     ];
 }

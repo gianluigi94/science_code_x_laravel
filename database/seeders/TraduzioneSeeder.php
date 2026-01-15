@@ -3,14 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\TraduzioneModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TraduzioneSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+     /**
+ * Inserimento dei dati iniziali nel database.
+ *
+ * @return void
+ */
     public function run(): void
     {
         TraduzioneModel::create([
@@ -136,33 +137,33 @@ class TraduzioneSeeder extends Seeder
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.prev_slide_tooltip.title',
             'id_lingua' => 1,
-            'valore' => 'Vedi la locandina precedente: “{{title}}"',
+            'valore' => 'Vedi la locandina precedente: "{{title}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.prev_slide_tooltip.title',
             'id_lingua' => 2,
-            'valore' => 'See previous slide: “{{title}}"',
+            'valore' => 'See previous slide: "{{title}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.next_slide_tooltip.title',
             'id_lingua' => 1,
-            'valore' => 'Vedi la locandina successiva: “{{title}}".',
+            'valore' => 'Vedi la locandina successiva: "{{title}}".',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.next_slide_tooltip.title',
             'id_lingua' => 2,
-            'valore' => 'See next slide: “{{title}}"',
+            'valore' => 'See next slide: "{{title}}"',
         ]);
 
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.play_tooltip.title',
             'id_lingua' => 1,
-            'valore' => 'Vai alla pagina: “{{title}}”',
+            'valore' => 'Vai alla pagina: "{{title}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.carosello.play_tooltip.title',
             'id_lingua' => 2,
-            'valore' => 'Go to page: “{{title}}”',
+            'valore' => 'Go to page: "{{title}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.lingua.button.title',
@@ -587,12 +588,12 @@ class TraduzioneSeeder extends Seeder
         TraduzioneModel::create([
             'chiave' => 'ui.tooltips.play.title',
             'id_lingua' => 1,
-            'valore' => 'vai alla pagina “{{title}}”',
+            'valore' => 'vai alla pagina "{{title}}"',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.tooltips.play.title',
             'id_lingua' => 2,
-            'valore' => 'go to page “{{title}}”',
+            'valore' => 'go to page "{{title}}"',
         ]);
 
         TraduzioneModel::create([
@@ -630,12 +631,12 @@ class TraduzioneSeeder extends Seeder
         TraduzioneModel::create([
             'chiave' => 'ui.header.categorie.label',
             'id_lingua' => 1,
-            'valore' => 'le nostre categorie',
+            'valore' => 'Le nostre categorie',
         ]);
         TraduzioneModel::create([
             'chiave' => 'ui.header.categorie.label',
             'id_lingua' => 2,
-            'valore' => 'our categories',
+            'valore' => 'Our categories',
         ]);
 
         TraduzioneModel::create([

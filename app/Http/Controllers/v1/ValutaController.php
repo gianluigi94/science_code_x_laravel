@@ -12,54 +12,28 @@ use Illuminate\Http\Request;
 class ValutaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le valute .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
-     public function index(Request $request)
+    public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = ValutaModel::all();
         return new CollectionEstesa($risorsa, ValutaResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
-     * Display the specified resource.
+     * Mostra una singola valuta .
+     *
+     * @param Request $request
+     * @param ValutaModel $valuta
+     * @return ValutaResource
      */
     public function show(Request $request, ValutaModel $valuta)
     {
-        AppHelpers::gestisci_sessione($request);
-                 $risorsa = new ValutaResource($valuta);
-         return $risorsa;
-
-
-
-
-
-
-
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $risorsa = new ValutaResource($valuta);
+        return $risorsa;
     }
 }

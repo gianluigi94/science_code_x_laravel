@@ -5,6 +5,17 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+    /**
+     * Crea la vista `vista_ruoli_abilita`.
+     *
+     * La vista restituisce l'elenco delle abilità associate a ciascun ruolo,
+     * combinando le tabelle `ruoli`, `abilita` e `ruoli_abilita`.
+     * Ogni riga rappresenta una coppia ruolo–abilità, ordinata per ruolo
+     * e per abilità, ed è pensata per semplificare interrogazioni di lettura
+     * e reportistica sui permessi del sistema.
+     *
+     * @return void
+     */
     public function up(): void
     {
         DB::statement("
@@ -19,6 +30,11 @@ return new class extends Migration
         ");
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         DB::statement("DROP VIEW IF EXISTS vista_ruoli_abilita");

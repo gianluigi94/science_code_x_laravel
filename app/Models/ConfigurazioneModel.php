@@ -8,19 +8,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ConfigurazioneModel extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $table = 'configurazioni';
-    protected $primaryKey = 'id_configurazione';
+    protected $table = 'configurazioni'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_configurazione'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'chiave',
         'valore'
     ];
 
-       public static function leggi_valore($chiave)
-{
-    $config = self::where('chiave', $chiave)->first();
-    return $config ? $config->valore : null;
-}
+    /**
+     * Legge il valore di configurazione associato alla chiave.
+     *
+     * @param string $chiave
+     * @return string|null
+     */
+    public static function leggi_valore($chiave)
+    {
+        $config = self::where('chiave', $chiave)->first();
+        return $config ? $config->valore : null;
+    }
 }

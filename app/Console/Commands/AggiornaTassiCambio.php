@@ -1,5 +1,4 @@
 <?php
-// app/Console/Commands/AggiornaTassiCambio.php
 
 namespace App\Console\Commands;
 
@@ -10,53 +9,59 @@ use App\Models\ValutaModel;
 
 class AggiornaTassiCambio extends Command
 {
-    protected $signature = 'aggiorna:tassi-cambio';
-    protected $description = 'Scarica i tassi ECB (base EUR) e aggiorna tassi_cambio';
+    protected $signature = 'aggiorna:tassi-cambio'; // Definisco il nome del comando da usare in console del terminale
+    protected $description = 'Scarica i tassi ECB (base EUR) e aggiorna tassi_cambio'; // Spiego cosa fa il comando quando lo elenco in Artisan
 
+    /**
+     * Esegue il comando: scarico i tassi dalla BCE, li prepara e aggiorna la tabella tassi_cambio.
+     *
+     * @return int
+     */
     public function handle()
     {
-        $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
-        $res = Http::timeout(15)->get($url);
-        if (!$res->ok()) {
-            $this->error('Download fallito');
-            return self::FAILURE;
+        $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'; //  l'URL del file XML con i tassi giornalieri BCE
+        $res = Http::timeout(15)->get($url); // Faccio la richiesta HTTP con timeout di 15 secondi
+
+        if (!$res->ok()) { // Controllo se la risposta non è andata a buon fine
+            $this->error('Download fallito'); // Mostro un messaggio di errore in console del terminale
+            return self::FAILURE; // Esco dal comando segnalando fallimento
         }
 
-        $xml = simplexml_load_string($res->body());
-        if (!$xml) {
-            $this->error('XML non valido');
-            return self::FAILURE;
+        $xml = simplexml_load_string($res->body()); // Converto il corpo della risposta in un oggetto XML
+        if (!$xml) { // Controllo se il parsing dell'XML è fallito
+            $this->error('XML non valido'); // Avviso in console del terminale che l'XML non è leggibile
+            return self::FAILURE; // Esco dal comando segnalando fallimento
         }
 
-        // Ignora i namespace e prendi i nodi con attributi currency/rate
-        $nodes = $xml->xpath('/*/*[local-name()="Cube"]/*[local-name()="Cube"]/*[local-name()="Cube"]') ?: [];
-        $rates = ['EUR' => 1.0];
-        foreach ($nodes as $n) {
-            $cur = (string) $n['currency'];
-            $rate = (string) $n['rate'];
-            if ($cur && $rate) $rates[$cur] = (float) $rate;
+        $nodes = $xml->xpath('/*/*[local-name()="Cube"]/*[local-name()="Cube"]/*[local-name()="Cube"]') ?: []; // Estraggo i nodi con currency/rate usando XPath (o uso un array vuoto)
+        $rates = ['EUR' => 1.0]; // Inizializzo l'array dei tassi partendo da EUR=1 perché la base è l'euro
+
+        foreach ($nodes as $n) { // Scorro tutti i nodi trovati nell'XML
+            $cur = (string) $n['currency']; // Leggo il codice valuta  dal nodo
+            $rate = (string) $n['rate']; // Leggo il tasso associato dal nodo
+            if ($cur && $rate) $rates[$cur] = (float) $rate; // Se ho entrambi, salvo il tasso convertendolo in float
         }
 
-        // Aggiorna solo le valute presenti in tabella
-        $valute = ValutaModel::select('id_valuta','codice_iso')->get();
-        $now = now();
-        $rows = [];
-        foreach ($valute as $v) {
-            if (!isset($rates[$v->codice_iso])) continue;
-            $rows[] = [
-                'id_valuta'  => $v->id_valuta,
-                'tasso'      => $rates[$v->codice_iso],
-                'created_at' => $now,
-                'updated_at' => $now,
+        $valute = ValutaModel::select('id_valuta', 'codice_iso')->get(); // Recupero dal DB le valute che mi interessano
+        $now = now(); // Mi salvo l'istante attuale per riempire created_at e updated_at
+        $rows = []; // Preparo l'array delle righe da inserire in tabella
+
+        foreach ($valute as $v) { // Scorro tutte le valute presenti nel DB
+            if (!isset($rates[$v->codice_iso])) continue; // Se non ho un tasso per quel codice ISO, salto la valuta
+            $rows[] = [ // Aggiungo una riga pronta per l'inserimento
+                'id_valuta'  => $v->id_valuta, // Metto l'id della valuta dal DB
+                'tasso'      => $rates[$v->codice_iso], // Metto il tasso preso dall'XML in base al codice ISO
+                'created_at' => $now, // Imposto la data di creazione uguale per tutte le righe
+                'updated_at' => $now, // Imposto la data di aggiornamento uguale per tutte le righe
             ];
         }
 
-      if ($rows) {
-    DB::table('tassi_cambio')->truncate();  // svuota la tabella
-    DB::table('tassi_cambio')->insert($rows); // la ripopoli da zero
-}
+        if ($rows) {
+            DB::table('tassi_cambio')->truncate(); // Svuoto completamente la tabella dei tassi prima di reinserire i valori
+            DB::table('tassi_cambio')->insert($rows); // Inserisco tutte le righe preparate in un'unica operazione
+        }
 
-        $this->info('Aggiornati '.count($rows).' tassi.');
-        return self::SUCCESS;
+        $this->info('Aggiornati ' . count($rows) . ' tassi.'); // Comunico in console del terminale quanti tassi ho aggiornato
+        return self::SUCCESS; // Esco dal comando segnalando successo
     }
 }

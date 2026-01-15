@@ -3,17 +3,18 @@
 namespace Database\Seeders;
 
 use App\Models\StatoUtenteModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StatoUtenteSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
      */
     public function run(): void
     {
-         StatoUtenteModel::create([
+        StatoUtenteModel::create([
             'id_stato_utente' => 1,
             'stato' => 'attivo',
         ]);

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\AutenticazioneModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\RecapitoModel;
 use App\Models\TipoRecapitoModel;
@@ -11,10 +10,14 @@ use App\Models\TipoRecapitoModel;
 class AutenticazioneSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
      */
     public function run(): void
     {
+        // Generaro lo username salvato in `autenticazioni.user` a partire dall'email del contatto, usando un hash (SHA-512)
+
         $idTipoEmail = TipoRecapitoModel::where('tipo', 'email')->value('id_tipo_recapito');
 
         $hashEmail = function (int $idContatto) use ($idTipoEmail): string {

@@ -3,13 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\TipoIndirizzoModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TipoIndirizzoSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
      */
     public function run(): void
     {

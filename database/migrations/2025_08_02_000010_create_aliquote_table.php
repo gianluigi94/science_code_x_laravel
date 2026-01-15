@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Crea la tabella con i suoi relativi campi.
+     *
+     * @return void
+     */
     public function up(): void
     {
         Schema::create('aliquote', function (Blueprint $table) {
@@ -17,10 +22,16 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique('id_nazione');
-            $table->foreign('id_nazione')->references('id_nazione')->on('nazioni')->onDelete('cascade');
+            $table->foreign('id_nazione')->references('id_nazione')->on('nazioni')->onDelete('cascade');// Collego la nazione alla tabella nazioni e faccio eliminare automaticamente i record collegati quando la nazione viene cancellata
+
         });
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         Schema::dropIfExists('aliquote');

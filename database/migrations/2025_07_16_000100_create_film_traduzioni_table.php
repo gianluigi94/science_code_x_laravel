@@ -5,6 +5,12 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
+    /**
+     * Crea la tabella con i suoi relativi campi.
+     *
+     * @return void
+     */
     public function up(): void
     {
         Schema::create('film_traduzioni', function (Blueprint $table) {
@@ -13,10 +19,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_film');
             $table->unsignedBigInteger('id_lingua');
 
-            // 👇 PRIMA c'era solo "titolo"
-            //    ORA: img_titolo (immagine) + titolo (testo)
-            $table->string('img_titolo', 255)->nullable(); // es: "assets/titoli_en/titolo_en_noi_non_siamo_soli.webp"
-            $table->string('titolo', 255);                  // es: "Are We Not Alone?"
+            $table->string('img_titolo', 255)->nullable();
+            $table->string('titolo', 255);
 
             $table->string('sottotitolo', 255)->nullable();
             $table->string('trailer', 512)->nullable();
@@ -25,11 +29,13 @@ return new class extends Migration {
 
             $table->foreign('id_film')
                   ->references('id_film')->on('film')
-                  ->cascadeOnDelete();
+                  ->cascadeOnDelete();// Collego il film alla tabella film e faccio eliminare automaticamente i record collegati quando il film viene cancellato
+
 
             $table->foreign('id_lingua')
                   ->references('id_lingua')->on('lingue')
-                  ->cascadeOnDelete();
+                  ->cascadeOnDelete();// Collego la lingua alla tabella lingue e faccio eliminare automaticamente i record collegati quando la lingua viene cancellata
+
 
             $table->unique(['id_film', 'id_lingua'], 'uniq_film_lingua');
 
@@ -38,6 +44,11 @@ return new class extends Migration {
         });
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         Schema::dropIfExists('film_traduzioni');

@@ -11,52 +11,36 @@ use Illuminate\Support\Facades\Gate;
 
 class RuoloController extends Controller
 {
-    /**
-     * Display a listing of the resource.
+     /**
+     * Lista tutti i contatti (solo per sistemista).
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index()
-{
-    if (Gate::allows('abilita', 'sistemista')) {
-        $risorsa = RuoloModel::all();
-        return new CollectionEstesa($risorsa, RuoloResource::class);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (sistemista).");
-}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
     {
-        //
+        if (Gate::allows('abilita', 'sistemista')) {
+            $risorsa = RuoloModel::all();
+            return new CollectionEstesa($risorsa, RuoloResource::class);
+        }
+
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (sistemista).");
     }
 
-    /**
-     * Display the specified resource.
-     */
-   public function show(RuoloModel $ruolo)
-{
-    if (Gate::allows('abilita', 'sistemista')) {
-        return new RuoloResource($ruolo);
-    }
 
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (sistemista).");
-}
 
     /**
-     * Update the specified resource in storage.
+     * Mostra un singolo ruolo (solo "sistemista").
+     *
+     * @param RuoloModel $ruolo
+     * @return RuoloResource
      */
-    public function update(Request $request, string $id)
+    public function show(RuoloModel $ruolo)
     {
-        //
-    }
+        if (Gate::allows('abilita', 'sistemista')) {
+            return new RuoloResource($ruolo);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (sistemista).");
     }
 }

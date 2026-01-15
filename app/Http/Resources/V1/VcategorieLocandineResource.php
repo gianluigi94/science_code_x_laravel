@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegistaResource extends JsonResource
+class VcategorieLocandineResource extends JsonResource
 {
     /**
      * Converte la risorsa Abilita in array JSON.
@@ -15,18 +15,12 @@ class RegistaResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return $this->get_campi();
-    }
-
-    /**
-     * Definisce i campi da includere nella risposta JSON.
-     */
-    protected function get_campi()
-    {
         return [
-            'id_regista' => $this->id_regista,
-            'nome' => $this->nome,
+            'id_categoria'  => $this->id_categoria,
+            'tipo'         => $this->tipo,
+            'id_contenuto' => $this->id_contenuto,
+            'img_locandina' => $this->img_locandina,
+            'lingua'        => $this->lingua,
         ];
     }
-
 }

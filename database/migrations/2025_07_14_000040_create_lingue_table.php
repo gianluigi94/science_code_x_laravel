@@ -5,17 +5,28 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
+    /**
+     * Crea la tabella con i suoi relativi campi.
+     *
+     * @return void
+     */
     public function up(): void
     {
         Schema::create('lingue', function (Blueprint $table) {
             $table->id('id_lingua');
-            $table->char('codice', 2)->unique(); // es. it, en
+            $table->char('codice', 2)->unique();
             $table->string('nome', 50);
             $table->softDeletes();
             $table->timestamps();
         });
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         Schema::dropIfExists('lingue');

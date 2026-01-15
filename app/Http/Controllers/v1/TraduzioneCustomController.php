@@ -12,46 +12,29 @@ use Illuminate\Http\Request;
 class TraduzioneCustomController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le traduzioni custom .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = TraduzioneCustomModel::all();
-       return new CollectionEstesa($risorsa, traduzioneCustomResource::class);
+        return new CollectionEstesa($risorsa, traduzioneCustomResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra una singola traduzione custom .
+     *
+     * @param Request $request
+     * @param TraduzioneCustomModel $traduzionecustom
+     * @return TraduzioneCustomResource
      */
     public function show(Request $request, TraduzioneCustomModel $traduzionecustom)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = new TraduzioneCustomResource($traduzionecustom);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

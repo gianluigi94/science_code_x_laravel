@@ -12,46 +12,28 @@ use Illuminate\Http\Request;
 class TipoRecapitoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutti i tipi recapito .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-         AppHelpers::gestisci_sessione($request);
-         $risorsa = TipoRecapitoModel::all();
+        $risorsa = TipoRecapitoModel::all();
         return new CollectionEstesa($risorsa, TipoRecapitoResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
-     * Display the specified resource.
+     * Mostra un singolo tipo recapito .
+     *
+     * @param Request $request
+     * @param TipoRecapitoModel $tipo
+     * @return TipoRecapitoResource
      */
-     public function show(Request $request, TipoRecapitoModel $tipo)
-{
-    AppHelpers::gestisci_sessione($request, $tipo);
-    $risorsa = new TipoRecapitoResource($tipo);
-    return $risorsa;
-}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(Request $request, TipoRecapitoModel $tipo)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $risorsa = new TipoRecapitoResource($tipo);
+        return $risorsa;
     }
 }

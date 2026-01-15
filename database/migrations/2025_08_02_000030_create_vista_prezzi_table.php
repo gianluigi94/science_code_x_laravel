@@ -5,6 +5,22 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+
+    /**
+     * Crea la vista `vista_prezzi`.
+     *
+     * La vista fornisce, per ciascuna nazione attiva, le informazioni utili al calcolo
+     * dei prezzi/localizzazione economica:
+     * - nome della nazione (`nazione_it`),
+     * - nome della valuta associata,
+     * - tasso di cambio della valuta,
+     * - aliquota associata alla nazione.
+     *
+     * Usa LEFT JOIN per includere comunque la nazione anche se mancano valuta, tasso
+     * o aliquota. I record soft-deleted vengono esclusi
+     *
+     * @return void
+     */
     public function up(): void
     {
         DB::statement(<<<SQL
@@ -27,6 +43,11 @@ WHERE n.deleted_at IS NULL
 SQL);
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         DB::statement('DROP VIEW IF EXISTS vista_prezzi');

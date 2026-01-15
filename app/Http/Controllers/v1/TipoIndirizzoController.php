@@ -12,49 +12,32 @@ use Illuminate\Http\Request;
 class TipoIndirizzoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutti i tipi di indirizzo .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
 
         $risorsa = TipoIndirizzoModel::all();
-       return new CollectionEstesa($risorsa, TipoIndirizzoResource::class);
+        return new CollectionEstesa($risorsa, TipoIndirizzoResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra un singolo tipo di indirizzo .
+     *
+     * @param Request $request
+     * @param TipoIndirizzoModel $tipoindirizzo
+     * @return TipoIndirizzoResource
      */
     public function show(Request $request, TipoIndirizzoModel $tipoindirizzo)
     {
-        AppHelpers::gestisci_sessione($request, $tipoindirizzo);
+
 
         $risorsa = new TipoIndirizzoResource($tipoindirizzo);
         return $risorsa;
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

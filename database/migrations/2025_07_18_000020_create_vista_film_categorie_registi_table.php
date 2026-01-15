@@ -4,6 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
+
+       /**
+     * Crea la vista `vista_film_categorie_registi`.
+     *
+     * La vista restituisce :
+     * - dati base del film (id_film, img_sfondo),
+     * - il nome del regista associato (se presente),
+     * - il codice delle categorie associate (0..n categorie).
+     *
+     * Usa LEFT JOIN per includere comunque il film anche se non ha un regista
+     * o non ha categorie collegate. Tutte le tabelle coinvolte vengono filtrate
+     * per escludere i record soft-deleted (`deleted_at IS NULL`), inclusa la
+     * tabella ponte `categoria_film`.
+     *
+     * Ogni riga della vista rappresenta una combinazione film–categoria
+     *
+     * @return void
+     */
     public function up(): void
     {
         DB::statement(<<<SQL

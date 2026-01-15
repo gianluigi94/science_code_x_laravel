@@ -9,17 +9,23 @@ use Illuminate\Http\Request;
 
 class LogoutController extends Controller
 {
-    public function __invoke(Request $request)
+    /**
+     * Esegue il logout eliminando (soft delete) la sessione associata al bearer token.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request)
     {
-        // prendo il bearer token
+        // recupero il bearer token dall'header Authorization
         $token = $request->bearerToken();
 
+        // se esiste un token, elimino (soft delete) la sessione associata
         if ($token) {
-            // soft delete della sessione corrente (se esiste)
             SessioneModel::where('token', $token)->delete();
         }
 
-        // risposta standard
+        // ritorno una risposta standard di logout riuscito
         return response()->json(
             AppHelpers::risposta_custom(null, 'LOGOUT_OK'),
             200

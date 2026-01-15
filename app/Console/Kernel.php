@@ -1,5 +1,4 @@
 <?php
-// app/Console/Kernel.php
 
 namespace App\Console;
 
@@ -8,16 +7,26 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
+    /**
+     * Elenco dei comandi disponibili nell'applicazione.
+     *
+     * @var array
+     */
     protected $commands = [
-        \App\Console\Commands\AggiornaTassiCambio::class,
+        \App\Console\Commands\AggiornaTassiCambio::class, // Aggiungo il comando che aggiorna i tassi di cambio
     ];
 
+    /**
+     * Imposto quando eseguire automaticamente i comandi programmati.
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
     protected function schedule(Schedule $schedule): void
     {
-        // L'ECB pubblica intorno alle 16:00 CET; aggiornamento alle 17:10 Europe/Rome
-        $schedule->command('aggiorna:tassi-cambio')
-         ->dailyAt('17:10')
-         ->timezone('Europe/Rome');
-
+        $schedule->command('aggiorna:tassi-cambio') // Programmo l'esecuzione del comando aggiorna:tassi-cambio
+            ->dailyAt('17:10') // Lo faccio partire ogni giorno alle 17:10
+            ->timezone('Europe/Rome'); // Uso il fuso orario di Roma per calcolare l'orario corretto
     }
 }

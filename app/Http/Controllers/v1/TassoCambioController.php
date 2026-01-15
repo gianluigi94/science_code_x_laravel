@@ -12,46 +12,27 @@ use Illuminate\Http\Request;
 class TassoCambioController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutti i tassi di cambio .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = TassoCambioModel::all();
         return new CollectionEstesa($risorsa, TassoCambioResource::class);
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Mostra un singolo tasso di cambio .
+     *
+     * @param Request $request
+     * @param TassoCambioModel $tassocambio
+     * @return TassoCambioResource
      */
     public function show(Request $request, TassoCambioModel $tassocambio)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = new TassoCambioResource($tassocambio);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

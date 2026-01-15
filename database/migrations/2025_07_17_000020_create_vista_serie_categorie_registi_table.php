@@ -2,9 +2,27 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
+       /**
+     * Crea la vista `vista_serie_categorie_registi`.
+     *
+     * La vista espone:
+     * - dati base della serie (id_serie, img_sfondo),
+     * - il nome del regista associato ,
+     * - il codice delle categorie associate .
+     *
+     * Usa LEFT JOIN per includere comunque la serie anche se non ha un regista
+     * o non ha categorie collegate. Tutte le entità vengono filtrate per
+     * escludere i record soft-deleted, inclusa la tabella
+     * ponte `categoria_serie`.
+     *
+     * Ogni riga della vista rappresenta una combinazione serie–categoria
+     *
+     *
+     * @return void
+     */
     public function up(): void
     {
         DB::statement(<<<SQL
@@ -29,8 +47,14 @@ WHERE s.deleted_at IS NULL
 SQL);
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
-        DB::statement('DROP VIEW IF EXISTS `vista_serie_categorie`');
+        DB::statement('DROP VIEW IF EXISTS `vista_serie_categorie_registi`');
+
     }
 };

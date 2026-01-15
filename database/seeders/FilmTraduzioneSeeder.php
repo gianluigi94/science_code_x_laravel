@@ -3,64 +3,57 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\File;
 use App\Models\FilmModel;
 use App\Models\LinguaModel;
 use App\Models\FilmTraduzioneModel;
+use App\Helpers\AppHelpers;
 
 class FilmTraduzioneSeeder extends Seeder
 {
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
     public function run(): void
     {
-        $it = LinguaModel::firstOrCreate(['codice' => 'it'], ['nome' => 'italiano']);
-        $en = LinguaModel::firstOrCreate(['codice' => 'en'], ['nome' => 'inglese']);
+        $it = LinguaModel::firstOrCreate(['codice' => 'it'], ['nome' => 'italiano']); // Mi assicuro che la lingua IT esista (se manca la creo)
+        $en = LinguaModel::firstOrCreate(['codice' => 'en'], ['nome' => 'inglese']); // Mi assicuro che la lingua EN esista (se manca la creo)
 
-        $lingue = [
-            ['id' => (int) ($it->id_lingua ?? $it->id), 'data' => $this->loadJson('it')],
-            ['id' => (int) ($en->id_lingua ?? $en->id), 'data' => $this->loadJson('en')],
+        $lingue = [ // Mi preparo una lista di lingue con id lingua e JSON già caricato
+            ['id' => (int) ($it->id_lingua ?? $it->id), 'data' => AppHelpers::loadLangJson('it')], // salvo l'id della lingua IT e carico it.json
+            ['id' => (int) ($en->id_lingua ?? $en->id), 'data' => AppHelpers::loadLangJson('en')], // salvo l'id della lingua EN e carico en.json
         ];
 
-        foreach (FilmModel::all() as $film) {
-            $slug = preg_replace('/^film\./i', '', trim((string) $film->descrizione));
-            if ($slug === '') {
-                continue;
+        foreach (FilmModel::all() as $film) { // Scorro tutti i film presenti nel database
+            $slug = preg_replace('/^film\./i', '', trim((string) $film->descrizione)); // Tolgo il prefisso "film." dalla descrizione per ottenere lo slug
+            if ($slug === '') { // Controllo che lo slug non sia vuoto
+                continue; // Se è vuoto, salto questo film
             }
 
-            foreach ($lingue as $meta) {
-                $video = $meta['data']['VIDEO'] ?? $meta['data']['video'] ?? [];
-                $entry = $video[$slug] ?? null;
-                if (!$entry) {
-                    continue;
+            foreach ($lingue as $meta) { // Per ogni lingua (IT/EN) provo a trovare la traduzione nel JSON
+                $video = $meta['data']['VIDEO'] ?? $meta['data']['video'] ?? []; // prendo la sezione VIDEO dal JSON (gestendo anche la chiave in minuscolo)
+                $entry = $video[$slug] ?? null; // Cerco l'entry del film usando lo slug come chiave
+                if (!$entry) { // Controllo se ho trovato i metadati del film
+                    continue; // Se non li trovo, salto questa lingua
                 }
 
-                FilmTraduzioneModel::updateOrCreate(
+                FilmTraduzioneModel::updateOrCreate( // Creo o aggiorno la traduzione del film per questa lingua
                     [
-                        'id_film'   => $film->id_film,
-                        'id_lingua' => $meta['id'],
+                        'id_film'   => $film->id_film, // Identifico la traduzione tramite l'id del film
+                        'id_lingua' => $meta['id'], // Identifico la traduzione anche tramite l'id della lingua
                     ],
                     [
-                        // 👇 NUOVO: separazione immagine titolo / testo titolo
-                        'img_titolo'    => $entry['img_titolo']    ?? $entry['img_title']   ?? null,
-                        'titolo'        => $entry['titolo']        ?? null,
+                        'img_titolo'    => $entry['img_titolo']    ?? $entry['img_title']   ?? null, // Salvo l'immagine titolo (supporto due chiavi possibili)
+                        'titolo'        => $entry['titolo']        ?? null, // Salvo il titolo
 
-                        'sottotitolo'   => $entry['sottotitolo']   ?? $entry['subtitle']    ?? null,
-                        'trailer'       => $entry['video_trailer'] ?? $entry['trailer']     ?? null,
-                        'descrizione'   => $entry['intro']         ?? $entry['descrizione'] ?? null,
-                        'img_locandina' => $entry['locandina']     ?? $entry['poster']      ?? null,
+                        'sottotitolo'   => $entry['sottotitolo']   ?? $entry['subtitle']    ?? null, // Salvo il sottotitolo (supporto due chiavi possibili)
+                        'trailer'       => $entry['video_trailer'] ?? $entry['trailer']     ?? null, // Salvo l'URL trailer (supporto due chiavi possibili)
+                        'descrizione'   => $entry['intro']         ?? $entry['descrizione'] ?? null, // Salvo la descrizione/intro (supporto due chiavi possibili)
+                        'img_locandina' => $entry['locandina']     ?? $entry['poster']      ?? null, // Salvo la locandina/poster (supporto due chiavi possibili)
                     ]
                 );
             }
         }
-    }
-
-    protected function loadJson(string $lang): array
-    {
-        $path = storage_path("app/json_db/{$lang}.json");
-        if (!File::exists($path)) {
-            return [];
-        }
-
-        $data = json_decode(File::get($path), true);
-        return is_array($data) ? $data : [];
     }
 }

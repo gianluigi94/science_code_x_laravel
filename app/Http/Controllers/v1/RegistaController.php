@@ -12,46 +12,29 @@ use Illuminate\Http\Request;
 class RegistaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutti i registi .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = RegistaModel::all();
-       return new CollectionEstesa($risorsa, RegistaResource::class);
+        return new CollectionEstesa($risorsa, RegistaResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra un singolo regista .
+     *
+     * @param Request $request
+     * @param RegistaModel $regista
+     * @return RegistaResource
      */
     public function show(Request $request, RegistaModel $regista)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = new RegistaResource($regista);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

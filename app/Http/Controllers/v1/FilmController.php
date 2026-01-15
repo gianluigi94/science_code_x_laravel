@@ -6,57 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\CollectionEstesa;
 use App\Http\Resources\V1\FilmResource;
 use App\Models\FilmModel;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class FilmController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutti i film (solo "visualizzare_media").
+     *
+     * @return CollectionEstesa
      */
-     public function index()
-{
-    if (Gate::allows('abilita', 'visualizzare_media')) {
-        $risorsa = FilmModel::all();
-        return new CollectionEstesa($risorsa, FilmResource::class);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
-}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function index()
     {
-        //
+        if (Gate::allows('abilita', 'visualizzare_media')) {
+            $risorsa = FilmModel::all();
+            return new CollectionEstesa($risorsa, FilmResource::class);
+        }
+
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
     }
 
+
     /**
-     * Display the specified resource.
+     * Mostra un singolo film (solo "visualizzare_media").
+     *
+     * @param FilmModel $film
+     * @return FilmResource
      */
     public function show(FilmModel $film)
-{
-    if (Gate::allows('abilita', 'visualizzare_media')) {
-        return new FilmResource($film);
-    }
-
-    abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
-}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
     {
-        //
-    }
+        if (Gate::allows('abilita', 'visualizzare_media')) {
+            return new FilmResource($film);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        abort(403, "ATTENZIONE: ti manca l'abilità necessaria (visualizzare_media).");
     }
 }

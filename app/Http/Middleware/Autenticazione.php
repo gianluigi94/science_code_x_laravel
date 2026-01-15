@@ -8,47 +8,43 @@ use App\Models\SessioneModel;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 
 
 class Autenticazione
 {
-    public function handle(Request $request, Closure $next)
+    /**
+     * Controllo del token nella richiesta, verifico l'utente e lascio proseguire solo se autenticato e abilitato.
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next) // Gestisco l'autenticazione prima di far continuare la richiesta
     {
 
-        Log::info('AUTH HEADER', [
-        'authorization' => $request->header('Authorization'),
-        'all' => $request->headers->all(),
-    ]);
+            // DIAGNOSTICA DB: serve a capire perche' "a volte" usa forge invece di root
 
-        $token = $request->bearerToken();
+        $token = $request->bearerToken(); // Estraggo il token Bearer dall'header Authorization
 
-        if (!$token) {
-            abort(403, 'ATTENZIONE: TOKEN NON INSERITO');
+        if (!$token) { // Controllo che il token sia presente
+            abort(403, 'ATTENZIONE: TOKEN NON INSERITO'); // Blocco la richiesta se manca il token
         }
 
-        $payload = AccediController::verifica_token($token);
+        $payload = AccediController::verifica_token($token); // Verifico token e sessione e ottengo i dati del token
 
-        if ($payload != null) {
-            $contatto = ContattoModel::where("id_contatto", $payload->data->id_contatto)->firstOrFail();
+        if ($payload != null) { // Controllo che la verifica abbia restituito un payload valido
+            $contatto = ContattoModel::where("id_contatto", $payload->data->id_contatto)->firstOrFail(); // Recupero il contatto associato al token o fallisce
 
-            if ($contatto->id_stato_utente == 1) {
-                Auth::login($contatto);
-                $request->merge(['contatti_ruoli' => $contatto->ruoli->pluck('ruolo')->toArray()]);
+            if ($contatto->id_stato_utente == 1) { // Controllo che il contatto sia nello stato utente consentito(non bannato)
+                Auth::login($contatto); // Effettuo il login del contatto nel sistema di autenticazione di Laravel(dico che a i permessi per quella request da qui in poi)
+                $request->merge(['contatti_ruoli' => $contatto->ruoli->pluck('ruolo')->toArray()]); // Aggiungo alla request la lista dei ruoli del contatto
 
-
-                $sessione = SessioneModel::dati_sessione($token);
-                if ($sessione && $sessione->resta_collegato) {
-                    // solo keep-alive dell'idle, non cancellare né riscrivere righe
-                    SessioneModel::aggiorna_sessione($token);
-                }
-
-                return $next($request)->header('Authorization', 'Bearer ' . $token);
-            } else {
-                abort(403, 'ATTENZIONE: non sei un amministratore');
+                return $next($request)->header('Authorization', 'Bearer ' . $token); // Lascio proseguire la richiesta e rimando il token nell'header (per ora rimando lo stesso token, ma in futuro potrei cambiare le informazioni di ritorno)
+            } else { // Gestisco il caso in cui l'utente non sia nello stato richiesto
+                abort(403, 'ATTENZIONE: sei stato bannato');
             }
-        } else {
+        } else { // Gestisco il caso in cui il payload non esista
             abort(403, 'ATTENZIONE: il payload è vuoto');
         }
     }

@@ -12,48 +12,31 @@ use Illuminate\Http\Request;
 class CategoriaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le categorie .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
 
         $risorsa = CategoriaModel::all();
-       return new CollectionEstesa($risorsa, CategoriaResource::class);
+        return new CollectionEstesa($risorsa, CategoriaResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra una singola categoria .
+     *
+     * @param Request $request
+     * @param CategoriaModel $categoria
+     * @return CategoriaResource
      */
     public function show(Request $request, CategoriaModel $categoria)
     {
-        AppHelpers::gestisci_sessione($request);
 
         $risorsa = new CategoriaResource($categoria);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

@@ -9,50 +9,48 @@ use App\Models\StreamingFileModel;
 
 class StagioneSeeder extends Seeder
 {
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
     public function run(): void
     {
-        // Mappa descrizione serie ("serie.<slug>") -> id_serie
-        $serieMap = SerieModel::pluck('id_serie', 'descrizione')->all();
+        $serieMap = SerieModel::pluck('id_serie', 'descrizione')->all(); // creo una mappa descrizione_serie => id_serie per trovare rapidamente la serie
 
-        // Raggruppa gli episodi per (base "serie.<slug>", stagione N)
-        // Esempio descrizione streaming: "serie.piu_piccolo_di_un_atomo.s1.e3"
-        $counts = []; // es: $counts['serie.piu_piccolo_di_un_atomo'][1] = 4 (episodi)
+        $counts = []; // preparo una struttura per contare gli episodi per (serie, stagione)
 
-        $rows = StreamingFileModel::query()
-            ->where('descrizione', 'like', 'serie.%')
-            ->get(['descrizione']);
+        $rows = StreamingFileModel::query() // Preparo la query sui file streaming
+            ->where('descrizione', 'like', 'serie.%') // Tengo solo quelli legati alle serie
+            ->get(['descrizione']); // Carico solo la descrizione perché basta per il parsing
 
-        foreach ($rows as $row) {
-            $desc = (string) $row->descrizione;
+        foreach ($rows as $row) { // Scorro tutte le descrizioni dei file streaming delle serie
+            $desc = (string) $row->descrizione; // salvo la descrizione come stringa
 
-            if (preg_match('/^(serie\.[a-z0-9_]+)\.s(\d+)\.e(\d+)$/i', $desc, $m)) {
-                $base   = strtolower($m[1]);       // "serie.<slug>"
-                $season = (int) $m[2];             // numero stagione
-                // $episode = (int) $m[3];         // numero episodio (non serve salvarlo)
+            if (preg_match('/^(serie\.[a-z0-9_]+)\.s(\d+)\.e(\d+)$/i', $desc, $m)) { // Controllo e parsifico il formato serie.<slug>.sX.eY
+                $base   = strtolower($m[1]); // ricavo la base "serie.<slug>" in minuscolo per uniformare le chiavi
+                $season = (int) $m[2]; // ricavo il numero della stagione
 
-                if (!isset($counts[$base])) {
-                    $counts[$base] = [];
+                if (!isset($counts[$base])) { // Se è la prima volta che vedo questa serie
+                    $counts[$base] = []; // Inizializzo il contenitore delle stagioni per questa serie
                 }
-                if (!isset($counts[$base][$season])) {
-                    $counts[$base][$season] = 0;
+                if (!isset($counts[$base][$season])) { // Se è la prima volta che vedo questa stagione per la serie
+                    $counts[$base][$season] = 0; // Inizializzo il contatore episodi a 0
                 }
-                $counts[$base][$season] += 1;
+                $counts[$base][$season] += 1; // Incremento il numero di episodi trovati per quella stagione
             }
         }
 
-        // Crea/aggiorna stagioni in base ai conteggi
-        foreach ($counts as $base => $stagioni) {
-            $idSerie = $serieMap[$base] ?? null;
-            if (!$idSerie) {
-                // Non esiste una serie con descrizione = $base → salta
-                continue;
+        foreach ($counts as $base => $stagioni) { // Scorro ogni serie con le sue stagioni conteggiate
+            $idSerie = $serieMap[$base] ?? null; // Traduco la descrizione base nell'id della serie
+            if (!$idSerie) { // Se non trovo la serie nel DB
+                continue; // Salto perché non posso creare stagioni senza serie
             }
 
-            foreach ($stagioni as $seasonNumber => $episodeCount) {
-                $descStagione = $base . '.s' . $seasonNumber;
+            foreach ($stagioni as $seasonNumber => $episodeCount) { // Scorro ogni stagione conteggiata per la serie
+                $descStagione = $base . '.s' . $seasonNumber; // costruisco la descrizione tecnica della stagione
 
-                // Idempotente: aggiorna se esiste, altrimenti crea
-                StagioneModel::updateOrCreate(
+                StagioneModel::updateOrCreate( // Creo la stagione se non esiste o la aggiorno se esiste già
                     [
                         'id_serie'        => $idSerie,
                         'numero_stagione' => $seasonNumber,

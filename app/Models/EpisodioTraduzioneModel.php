@@ -10,9 +10,10 @@ class EpisodioTraduzioneModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'episodi_traduzioni';
-    protected $primaryKey = 'id_episodio_traduzione';
+    protected $table = 'episodi_traduzioni'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_episodio_traduzione'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'id_episodio',
         'id_lingua',
@@ -20,10 +21,21 @@ class EpisodioTraduzioneModel extends Model
         'descrizione',
     ];
 
+    /**
+     * Relazione: la traduzione appartiene a un episodio.
+     *
+     * @return BelongsTo
+     */
     public function episodio()
     {
         return $this->belongsTo(EpisodioModel::class, 'id_episodio', 'id_episodio');
     }
+
+    /**
+     * Relazione: la traduzione appartiene a una lingua.
+     *
+     * @return BelongsTo
+     */
     public function lingua()
     {
         return $this->belongsTo(LinguaModel::class, 'id_lingua', 'id_lingua');

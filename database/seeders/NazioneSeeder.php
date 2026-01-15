@@ -1,5 +1,4 @@
 <?php
-// database/seeders/NazioneSeeder.php
 
 namespace Database\Seeders;
 
@@ -9,25 +8,58 @@ use Illuminate\Database\Seeder;
 
 class NazioneSeeder extends Seeder
 {
+
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
     public function run(): void
     {
-        $ids = ValutaModel::pluck('id_valuta', 'codice_iso')->toArray();
-        $usdId = $ids['USD'] ?? null;
-        $eurId = $ids['EUR'] ?? null;
+        $ids = ValutaModel::pluck('id_valuta', 'codice_iso')->toArray(); // creo una mappa codice_valuta => id_valuta
+        $usdId = $ids['USD'] ?? null; // salvo l'id della valuta USD come fallback generale
+        $eurId = $ids['EUR'] ?? null; // salvo l'id della valuta EUR
 
-        $csv = storage_path("app/csv_db/nazioni.csv");
-        $file = fopen($csv, "r");
-        while (($data = fgetcsv($file, 197, ",")) !== false) {
+        $csv = storage_path("app/csv_db/nazioni.csv"); // Mi costruisco il percorso del CSV delle nazioni
+        $file = fopen($csv, "r"); // Apro il file CSV in lettura
 
-            $iso = $data[4];
-            $valuta_id = $usdId; // fallback
+        while (($data = fgetcsv($file, 197, ",")) !== false) { // Scorro tutte le righe del CSV
+            $iso = $data[4]; // Estraggo il codice ISO a 2 lettere della nazione
+            $valuta_id = $usdId; // Imposto di default USD come valuta (fallback)
 
-            // EURO (inclusi microstati + Croazia + Estonia + Kosovo)
-            $euro_iso = ['IT', 'FR', 'DE', 'ES', 'PT', 'NL', 'BE', 'AT', 'FI', 'IE', 'GR', 'CY', 'MT', 'LU', 'SI', 'SK', 'LV', 'EE', 'LT', 'HR', 'SM', 'AD', 'MC', 'VA', 'XK'];
+            // Gestisco i paesi che adottano l'EURO (inclusi microstati e casi particolari)
+            $euro_iso = [
+                'IT',
+                'FR',
+                'DE',
+                'ES',
+                'PT',
+                'NL',
+                'BE',
+                'AT',
+                'FI',
+                'IE',
+                'GR',
+                'CY',
+                'MT',
+                'LU',
+                'SI',
+                'SK',
+                'LV',
+                'EE',
+                'LT',
+                'HR',
+                'SM',
+                'AD',
+                'MC',
+                'VA',
+                'XK'
+            ];
             if (in_array($iso, $euro_iso, true)) {
                 $valuta_id = $eurId;
             }
 
+            // Per gli altri paesi associo la valuta specifica, se presente, altrimenti USD
             elseif ($iso === 'US') $valuta_id = $ids['USD'] ?? $usdId;
             elseif ($iso === 'JP') $valuta_id = $ids['JPY'] ?? $usdId;
             elseif ($iso === 'BG') $valuta_id = $ids['BGN'] ?? $usdId;
@@ -59,20 +91,19 @@ class NazioneSeeder extends Seeder
             elseif ($iso === 'TH') $valuta_id = $ids['THB'] ?? $usdId;
             elseif ($iso === 'ZA') $valuta_id = $ids['ZAR'] ?? $usdId;
 
-
-            NazioneModel::create(
-                [
-                    "id_nazione"   => $data[0],
-                    "nazione_it"   => $data[1],
-                    "nazione_en"   => $data[2],
-                    "continente"   => $data[3],
-                    "iso"          => $data[4],
-                    "iso3"         => $data[5],
-                    "prefisso_tel" => $data[6],
-                    "id_valuta"    => $valuta_id
-                ]
-            );
+            // Inserisco la nazione nel database con i dati letti dal CSV e la valuta determinata
+            NazioneModel::create([
+                "id_nazione"   => $data[0],
+                "nazione_it"   => $data[1],
+                "nazione_en"   => $data[2],
+                "continente"   => $data[3],
+                "iso"          => $data[4],
+                "iso3"         => $data[5],
+                "prefisso_tel" => $data[6],
+                "id_valuta"    => $valuta_id
+            ]);
         }
-        fclose($file);
+
+        fclose($file); // Chiudo il file CSV dopo aver terminato la lettura
     }
 }

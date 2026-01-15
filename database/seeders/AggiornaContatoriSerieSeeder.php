@@ -7,9 +7,14 @@ use App\Models\SerieModel;
 
 class AggiornaContatoriSerieSeeder extends Seeder
 {
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
     public function run(): void
     {
-        // Conteggi basati sulle relazioni; escludono i soft-deleted di default
+        // Conteggi basati sulle relazioni; escludono i soft-deleted di default, serve per sapere il numero stagioni/episodi di una serie
         SerieModel::query()
             ->withCount(['stagioni', 'episodi'])
             ->orderBy('id_serie')
@@ -20,6 +25,6 @@ class AggiornaContatoriSerieSeeder extends Seeder
                         'numero_episodi'  => $s->episodi_count,
                     ]);
                 }
-            }, 'id_serie'); // importante: la PK si chiama id_serie
+            }, 'id_serie');
     }
 }

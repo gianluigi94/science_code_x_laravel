@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crea la tabella con i suoi relativi campi.
+     *
+     * @return void
      */
     public function up(): void
     {
@@ -20,7 +22,8 @@ return new class extends Migration
             $table->char('iso3', 3);
             $table->string('prefisso_tel', 45);
             $table->unsignedBigInteger('id_valuta')->nullable();
-            $table->foreign('id_valuta')->references('id_valuta')->on('valute');
+            $table->foreign('id_valuta')->references('id_valuta')->on('valute');// Collego la valuta alla tabella delle valute disponibili
+
 
             $table->softDeletes();
             $table->timestamps();
@@ -28,7 +31,9 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
      */
     public function down(): void
     {

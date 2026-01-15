@@ -12,46 +12,27 @@ use Illuminate\Http\Request;
 class AliquotaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le aliquote .
+     *
+     * @param Request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = AliquotaModel::all();
         return new CollectionEstesa($risorsa, AliquotaResource::class);
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Mostra una singola aliquota .
+     *
+     * @param Request
+     * @param AliquotaModel $aliquota
+     * @return AliquotaResource
      */
     public function show(Request $request, AliquotaModel $aliquota)
     {
-        AppHelpers::gestisci_sessione($request);
         $risorsa = new AliquotaResource($aliquota);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

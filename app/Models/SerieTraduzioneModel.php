@@ -10,16 +10,16 @@ class SerieTraduzioneModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'serie_traduzioni';
-    protected $primaryKey = 'id_serie_traduzione';
+    protected $table = 'serie_traduzioni'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_serie_traduzione'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'id_serie',
         'id_lingua',
 
-        // 👇 separazione immagine titolo / testo titolo
-        'img_titolo',   // path immagine titolo
-        'titolo',       // testo del titolo
+        'img_titolo',
+        'titolo',
 
         'sottotitolo',
         'trailer',
@@ -27,11 +27,21 @@ class SerieTraduzioneModel extends Model
         'img_locandina',
     ];
 
+    /**
+     * Relazione: la traduzione appartiene a una serie.
+     *
+     * @return BelongsTo
+     */
     public function serie()
     {
         return $this->belongsTo(SerieModel::class, 'id_serie', 'id_serie');
     }
 
+     /**
+     * Relazione: la traduzione appartiene a una lingua.
+     *
+     * @return BelongsTo
+     */
     public function lingua()
     {
         return $this->belongsTo(LinguaModel::class, 'id_lingua', 'id_lingua');

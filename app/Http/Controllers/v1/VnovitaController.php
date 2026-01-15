@@ -12,12 +12,13 @@ use Illuminate\Http\Request;
 class VnovitaController extends Controller
 {
     /**
-     * GET /api/v1/novita
-     * Restituisce TUTTE le novità (ordine per descrizione, o come vuoi).
+     * Lista le novità .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-        AppHelpers::gestisci_sessione($request);
 
         // qui puoi cambiare l'ordine come preferisci
         $risorsa = VnovitaModel::orderBy('descrizione')->get();
@@ -26,16 +27,14 @@ class VnovitaController extends Controller
     }
 
     /**
-     * GET /api/v1/novita/{indice}
-     * Esempi:
-     *   /api/v1/novita/1  -> primo elemento
-     *   /api/v1/novita/5  -> quinto elemento
+     * Mostra la novità in posizione $indice (partendo da 1) ordinata per descrizione .
      *
-     * L'indice è 1-based (1 = primo).
+     * @param Request $request
+     * @param int $indice
+     * @return VnovitaResource
      */
     public function show(Request $request, int $indice)
     {
-        AppHelpers::gestisci_sessione($request);
 
         if ($indice < 1) {
             abort(404);

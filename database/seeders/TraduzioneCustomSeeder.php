@@ -8,9 +8,11 @@ use Illuminate\Database\Seeder;
 
 class TraduzioneCustomSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+     /**
+ * Inserimento dei dati iniziali nel database.
+ *
+ * @return void
+ */
     public function run(): void
     {
         TraduzioneCustomModel::create([

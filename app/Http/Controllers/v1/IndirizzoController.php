@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Gate;
 class IndirizzoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutti gli indirizzi (solo "moderatore").
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
@@ -25,16 +28,12 @@ class IndirizzoController extends Controller
         abort(403, "ATTENZIONE: ti manca l'abilità necessaria (moderatore).");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
-     * Display the specified resource.
+     * Mostra un indirizzo: consentito ad admin principale o al proprietario (richiede "gestire_account").
+     *
+     * @param IndirizzoModel $indirizzo
+     * @return IndirizzoResource
      */
     public function show(IndirizzoModel $indirizzo)
     {
@@ -53,22 +52,5 @@ class IndirizzoController extends Controller
         }
 
         abort(403, "ATTENZIONE: ti manca l'abilità necessaria (gestire_account).");
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

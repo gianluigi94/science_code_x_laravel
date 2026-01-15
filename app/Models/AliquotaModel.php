@@ -11,14 +11,20 @@ class AliquotaModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'aliquote';
-    protected $primaryKey = 'id_aliquota';
+    protected $table = 'aliquote'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_aliquota'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'id_nazione',
         'aliquota',
     ];
 
+    /**
+     * Relazione: l'aliquota appartiene a una nazione.
+     *
+     * @return BelongsTo
+     */
     public function nazione()
     {
         return $this->belongsTo(NazioneModel::class, 'id_nazione', 'id_nazione');

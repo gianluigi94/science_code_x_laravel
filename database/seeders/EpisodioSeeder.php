@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\File; // <— aggiunto
+use Illuminate\Support\Facades\File;
 use App\Models\EpisodioModel;
 use App\Models\SerieModel;
 use App\Models\StagioneModel;
@@ -11,65 +11,62 @@ use App\Models\StreamingFileModel;
 
 class EpisodioSeeder extends Seeder
 {
+
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
+
     public function run(): void
     {
-        // ===== 1) Carica it.json per le anteprime =====
-        $itPath = storage_path('app/json_db/it.json');
-        $itJson = is_file($itPath) ? json_decode(File::get($itPath), true) : null;
-        // Accetta VIDEO o video come chiave
-        $videoRoot = $itJson['VIDEO'] ?? ($itJson['video'] ?? []);
+        $itPath = storage_path('app/json_db/it.json'); // Mi preparo il percorso del JSON italiano
+        $itJson = is_file($itPath) ? json_decode(File::get($itPath), true) : null; // Se il file esiste lo leggo e lo decodifico, altrimenti metto null
+        $videoRoot = $itJson['VIDEO'] ?? ($itJson['video'] ?? []); // Mi prendo la sezione VIDEO (gestendo anche una possibile chiave in minuscolo)
 
-        // ===== 2) Mappa "serie.<slug>" -> id_serie =====
-        $serieMap = SerieModel::pluck('id_serie', 'descrizione')->all();
+        $serieMap = SerieModel::pluck('id_serie', 'descrizione')->all(); // Mi creo una mappa descrizione_serie => id_serie per trovare rapidamente la serie
 
-        // ===== 3) Prendi streaming descrizione tipo: serie.<slug>.sN.eM =====
-        $streams = StreamingFileModel::query()
-            ->where('descrizione', 'like', 'serie.%')
-            ->get(['id_streaming_file', 'descrizione']);
+        $streams = StreamingFileModel::query() // Preparo la query sui file streaming
+            ->where('descrizione', 'like', 'serie.%') // Tengo solo quelli che appartengono alle serie (prefisso "serie.")
+            ->get(['id_streaming_file', 'descrizione']); // Carico solo i campi che mi servono
 
-        foreach ($streams as $sf) {
-            $desc = (string) $sf->descrizione;
+        foreach ($streams as $sf) { // Scorro tutti i file streaming delle serie
+            $desc = (string) $sf->descrizione; // Mi salvo la descrizione come stringa
 
-            // Match "serie.slug.s<stagione>.e<episodio>"
-            if (!preg_match('/^(serie\.[a-z0-9_]+)\.s(\d+)\.e(\d+)$/i', $desc, $m)) {
-                continue;
+            if (!preg_match('/^(serie\.[a-z0-9_]+)\.s(\d+)\.e(\d+)$/i', $desc, $m)) { // Verifico che la descrizione rispetti il formato atteso serie.<slug>.sX.eY
+                continue; // Se non rispetta il formato, salto questo file
             }
 
-            $base            = strtolower($m[1]);       // "serie.<slug>"
-            $numeroStagione  = (int) $m[2];
-            $numeroEpisodio  = (int) $m[3];
+            $base            = strtolower($m[1]); // Mi ricavo la parte base "serie.<slug>" e la porto in minuscolo
+            $numeroStagione  = (int) $m[2]; // Mi ricavo il numero di stagione dalla regex
+            $numeroEpisodio  = (int) $m[3]; // Mi ricavo il numero di episodio dalla regex
 
-            // id_serie
-            $idSerie = $serieMap[$base] ?? null;
-            if (!$idSerie) continue;
+            $idSerie = $serieMap[$base] ?? null; // Cerco l'id della serie usando la base come chiave
+            if (!$idSerie) continue; // Se non trovo la serie nel DB, salto
 
-            // Trova/crea stagione
-            $descrizioneStagione = $base . '.s' . $numeroStagione;
-            $stagione = StagioneModel::updateOrCreate(
-                ['id_serie' => $idSerie, 'numero_stagione' => $numeroStagione],
-                ['descrizione' => $descrizioneStagione]
+            $descrizioneStagione = $base . '.s' . $numeroStagione; // Mi costruisco una descrizione coerente per la stagione (es. serie.foo.s1)
+            $stagione = StagioneModel::updateOrCreate( // Creo la stagione se non esiste o la aggiorno se esiste già
+                ['id_serie' => $idSerie, 'numero_stagione' => $numeroStagione], // Identifico univocamente la stagione per (serie, numero_stagione)
+                ['descrizione' => $descrizioneStagione] // Aggiorno/imposto la descrizione della stagione
             );
 
-            // ===== 4) Ricava img_anteprima da it.json =====
-            // base = "serie.<slug>" → tolgo "serie." per ottenere lo slug
-            $slug = substr($base, 6); // rimuove "serie."
-            $sKey = (string) $numeroStagione;
-            $eKey = (string) $numeroEpisodio;
+            $slug = substr($base, 6); // Tolgo "serie." dalla base per ottenere solo lo slug (es. "foo")
+            $sKey = (string) $numeroStagione; // Converto il numero stagione in stringa per usarlo come chiave nel JSON
+            $eKey = (string) $numeroEpisodio; // Converto il numero episodio in stringa per usarlo come chiave nel JSON
 
-            $imgAnteprima = $videoRoot[$slug]['serie'][$sKey][$eKey]['anteprima'] ?? 'placeholder.png';
+            $imgAnteprima = $videoRoot[$slug]['serie'][$sKey][$eKey]['anteprima'] ?? 'placeholder.png'; // Cerco l'immagine anteprima nel JSON, altrimenti uso un placeholder
 
-            // ===== 5) Crea/aggiorna episodio =====
-            EpisodioModel::updateOrCreate(
+            EpisodioModel::updateOrCreate( // Creo o aggiorno l'episodio
                 [
-                    'id_stagione'     => $stagione->id_stagione,
-                    'numero_episodio' => $numeroEpisodio,
+                    'id_stagione'     => $stagione->id_stagione, // Identifico l'episodio tramite la stagione
+                    'numero_episodio' => $numeroEpisodio, // e il numero episodio dentro la stagione
                 ],
                 [
-                    'id_serie'          => $idSerie,
-                    'descrizione'       => $desc,              // es: serie.slug.s1.e3
-                    'durata'            => 0,                  // fittizio per ora
-                    'img_anteprima'     => $imgAnteprima,      // ← preso da it.json
-                    'id_streaming_file' => $sf->id_streaming_file,
+                    'id_serie'          => $idSerie, // Collego l'episodio alla serie
+                    'descrizione'       => $desc, // Salvo la descrizione completa
+                    'durata'            => 0, // Inizializzo la durata a 0 (verrà aggiornata in seguito da altri processi/seeder)
+                    'img_anteprima'     => $imgAnteprima, // Salvo l'immagine anteprima trovata nel JSON
+                    'id_streaming_file' => $sf->id_streaming_file, // Collego l'episodio al file streaming
                 ]
             );
         }

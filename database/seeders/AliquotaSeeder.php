@@ -1,5 +1,4 @@
 <?php
-// database/seeders/AliquotaSeeder.php
 
 namespace Database\Seeders;
 
@@ -9,6 +8,11 @@ use Illuminate\Database\Seeder;
 
 class AliquotaSeeder extends Seeder
 {
+    /**
+     * Inserimento dei dati iniziali nel database.
+     *
+     * @return void
+     */
     public function run(): void
     {
         $aliquote = [
@@ -40,7 +44,8 @@ class AliquotaSeeder extends Seeder
             'SI' => 22.00,
             'SK' => 23.00,
         ];
-
+        // Scorre l'elenco ISO => aliquota: per ogni codice ISO cerca l'id della nazione in tabella `nazioni`
+        //  Se la nazione esiste, crea l'aliquota se non presente oppure la aggiorna se già esiste
         foreach ($aliquote as $iso => $percentuale) {
             $idNazione = NazioneModel::where('iso', $iso)->value('id_nazione');
             if ($idNazione) {

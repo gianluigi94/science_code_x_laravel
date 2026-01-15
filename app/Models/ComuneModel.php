@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ComuneModel extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-     protected $table = 'comuni';
-    protected $primaryKey = 'id_comune';
+    protected $table = 'comuni'; //Nome della tabella associata al modello
+    protected $primaryKey = 'id_comune'; //Identificativo del record
 
+    //Elenco dei campi che possono essere salvati nel modello
     protected $fillable = [
         'comune',
         'regione',
@@ -28,11 +29,13 @@ class ComuneModel extends Model
         'codice_istat'
     ];
 
+    /**
+     * Relazione: il comune ha molti indirizzi.
+     *
+     * @return HasMany
+     */
     public function indirizzi()
-{
-    return $this->hasMany(IndirizzoModel::class, 'id_comune', 'id_comune');
+    {
+        return $this->hasMany(IndirizzoModel::class, 'id_comune', 'id_comune');
+    }
 }
-
-
-}
-

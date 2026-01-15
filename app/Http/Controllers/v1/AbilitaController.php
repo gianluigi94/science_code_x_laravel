@@ -12,7 +12,12 @@ use Illuminate\Support\Facades\Gate;
 class AbilitaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Restituisce l'elenco completo delle abilità.
+     *
+     * Accesso consentito solo a chi possiede l'abilità "sistemista"
+     * (verifica tramite Gate::allows('abilita', 'sistemista')).
+     *
+     * @return CollectionEstesa
      */
     public function index()
     {
@@ -24,16 +29,15 @@ class AbilitaController extends Controller
         abort(403, "ATTENZIONE: ti manca l'abilità necessaria (sistemista).");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Restituisce il dettaglio di una singola abilità.
+     *
+     * Accesso consentito solo a chi possiede l'abilità "sistemista".
+     *
+     * @param AbilitaModel $abilita
+     * @return AbilitaResource
      */
     public function show(AbilitaModel $abilita)
     {
@@ -44,19 +48,5 @@ class AbilitaController extends Controller
         abort(403, "ATTENZIONE: ti manca l'abilità necessaria (sistemista).");
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

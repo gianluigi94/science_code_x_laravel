@@ -5,6 +5,25 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+
+    /**
+     * Crea la vista `vista_novita`.
+     *
+     * La vista raccoglie in un'unica query le "novità" provenienti sia dai film
+     * sia dalle serie, includendo i contenuti localizzati per lingua.
+     *
+     * In particolare:
+     * - seleziona i record marcati come novità (`novita = 1`) da `film` e `serie`,
+     * - unisce le rispettive tabelle di traduzione (`film_traduzioni`, `serie_traduzioni`)
+     *   per ottenere titolo, sottotitolo, immagini e trailer,
+     * - unisce `lingue` per esporre il codice lingua.
+     *
+     * Le due selezioni vengono combinate con `UNION ALL` per mantenere tutte le righe
+     * (senza eliminare eventuali duplicati). Ogni riga rappresenta un contenuto
+     * (film o serie) in una specifica lingua.
+     *
+     * @return void
+     */
     public function up(): void
     {
         DB::statement(<<<SQL
@@ -44,6 +63,11 @@ SQL
         );
     }
 
+    /**
+     * Riporta indietro le modifiche fatte dalla migrazione.
+     *
+     * @return void
+     */
     public function down(): void
     {
         DB::statement('DROP VIEW IF EXISTS vista_novita');

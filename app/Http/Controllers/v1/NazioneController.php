@@ -12,46 +12,29 @@ use Illuminate\Http\Request;
 class NazioneController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista tutte le nazioni .
+     *
+     * @param Request $request
+     * @return CollectionEstesa
      */
     public function index(Request $request)
     {
-         AppHelpers::gestisci_sessione($request);
         $risorsa = NazioneModel::all();
-       return new CollectionEstesa($risorsa, NazioneResource::class);
+        return new CollectionEstesa($risorsa, NazioneResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
-     * Display the specified resource.
+     * Mostra una singola nazione .
+     *
+     * @param Request $request
+     * @param NazioneModel $nazione
+     * @return NazioneResource
      */
     public function show(Request $request, NazioneModel $nazione)
     {
-    AppHelpers::gestisci_sessione($request);
         $risorsa = new NazioneResource($nazione);
         return $risorsa;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
