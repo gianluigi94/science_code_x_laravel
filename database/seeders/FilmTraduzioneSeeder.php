@@ -44,13 +44,10 @@ class FilmTraduzioneSeeder extends Seeder
                         'id_lingua' => $meta['id'], // Identifico la traduzione anche tramite l'id della lingua
                     ],
                     [
-                        'img_titolo'    => $entry['img_titolo']    ?? $entry['img_title']   ?? null, // Salvo l'immagine titolo (supporto due chiavi possibili)
                         'titolo'        => $entry['titolo']        ?? null, // Salvo il titolo
-
                         'sottotitolo'   => $entry['sottotitolo']   ?? $entry['subtitle']    ?? null, // Salvo il sottotitolo (supporto due chiavi possibili)
-                        'trailer'       => $entry['video_trailer'] ?? $entry['trailer']     ?? null, // Salvo l'URL trailer (supporto due chiavi possibili)
                         'descrizione'   => $entry['intro']         ?? $entry['descrizione'] ?? null, // Salvo la descrizione/intro (supporto due chiavi possibili)
-                        'img_locandina' => $entry['locandina']     ?? $entry['poster']      ?? null, // Salvo la locandina/poster (supporto due chiavi possibili)
+
                     ]
                 );
             }

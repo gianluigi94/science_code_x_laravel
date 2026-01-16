@@ -28,7 +28,7 @@ return new class extends Migration {
 CREATE OR REPLACE VIEW `vista_film_categorie_registi` AS
 SELECT
     f.id_film,
-    f.img_sfondo,
+    f.descrizione,
     r.nome       AS regista_nome,
     c.codice     AS categoria_codice
 FROM `film` f

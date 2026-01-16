@@ -29,7 +29,7 @@ return new class extends Migration {
 CREATE OR REPLACE VIEW `vista_serie_categorie_registi` AS
 SELECT
     s.id_serie,
-    s.img_sfondo,
+    s.descrizione,
     r.nome                AS regista_nome,
     c.codice              AS categoria_codice
 

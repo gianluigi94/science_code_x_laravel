@@ -27,8 +27,6 @@ return new class extends Migration {
             $table->unsignedSmallInteger('numero_stagioni');
             $table->unsignedSmallInteger('numero_episodi');
 
-            $table->string('img_sfondo', 512);
-
             $table->boolean('novita')->default(false)->index();
 
             $table->softDeletes();

@@ -16,9 +16,7 @@ class VnovitaModel extends Model
     protected $fillable = [
         'descrizione',
         'titolo',
-        'img_titolo',
         'sottotitolo',
-        'trailer',
         'lingua',
     ];
 }

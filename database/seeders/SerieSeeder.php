@@ -56,7 +56,6 @@ class SerieSeeder extends Seeder
                     : 1; // Se non lo trovo, uso 1 come fallback
 
                 $anno = isset($p['anno']) ? (int) $p['anno'] : 2000; // prendo l'anno dal JSON oppure uso 2000 come fallback
-                $imgSfondo = $p['img_hero'] ?? 'placeholder.webp'; // prendo l'immagine di sfondo oppure uso un placeholder
 
                 $descrizione = 'serie.' . $slug; // costruisco la descrizione tecnica della serie (serie.<slug>)
 
@@ -65,7 +64,6 @@ class SerieSeeder extends Seeder
                     'anno'            => $anno,
                     'numero_stagioni' => 0,
                     'numero_episodi'  => 0,
-                    'img_sfondo'      => $imgSfondo,
                     'novita'          => in_array($slug, $novitaSlugs, true),
                     'descrizione'     => $descrizione,
                 ]);

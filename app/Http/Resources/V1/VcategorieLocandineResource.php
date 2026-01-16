@@ -17,9 +17,9 @@ class VcategorieLocandineResource extends JsonResource
     {
         return [
             'id_categoria'  => $this->id_categoria,
-            'tipo'         => $this->tipo,
-            'id_contenuto' => $this->id_contenuto,
-            'img_locandina' => $this->img_locandina,
+            'tipo'          => $this->tipo,
+            'id_contenuto'  => $this->id_contenuto,
+            'slug'          => $this->slug,
             'lingua'        => $this->lingua,
         ];
     }

@@ -25,7 +25,6 @@ return new class extends Migration {
 
             $table->unsignedSmallInteger('anno');
              $table->unsignedInteger('durata');
-            $table->string('img_sfondo', 512);
 
             $table->unsignedBigInteger('id_streaming_file');
             $table->foreign('id_streaming_file')

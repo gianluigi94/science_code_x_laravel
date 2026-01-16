@@ -27,16 +27,21 @@ CREATE VIEW vista_categorie_locandine AS
         cf.id_categoria     AS id_categoria,
         'film'              AS tipo,
         cf.id_film          AS id_contenuto,
-        ft.img_locandina    AS img_locandina,
+               CASE
+         WHEN f.descrizione LIKE 'film.%' THEN REPLACE(f.descrizione, 'film.', '')
+         ELSE f.descrizione
+       END AS slug,
         l.codice            AS lingua
     FROM categoria_film cf
+       INNER JOIN film f
+       ON f.id_film = cf.id_film
     INNER JOIN film_traduzioni ft
         ON ft.id_film = cf.id_film
     INNER JOIN lingue l
         ON l.id_lingua = ft.id_lingua
     WHERE cf.deleted_at IS NULL
       AND ft.deleted_at IS NULL
-      AND ft.img_locandina IS NOT NULL
+      AND f.deleted_at IS NULL
 
     UNION ALL
 
@@ -45,16 +50,21 @@ CREATE VIEW vista_categorie_locandine AS
         cs.id_categoria     AS id_categoria,
         'serie'             AS tipo,
         cs.id_serie         AS id_contenuto,
-        st.img_locandina    AS img_locandina,
+               CASE
+         WHEN s.descrizione LIKE 'serie.%' THEN REPLACE(s.descrizione, 'serie.', '')
+         ELSE s.descrizione
+       END AS slug,
         l.codice            AS lingua
     FROM categoria_serie cs
+       INNER JOIN serie s
+       ON s.id_serie = cs.id_serie
     INNER JOIN serie_traduzioni st
         ON st.id_serie = cs.id_serie
     INNER JOIN lingue l
         ON l.id_lingua = st.id_lingua
     WHERE cs.deleted_at IS NULL
       AND st.deleted_at IS NULL
-      AND st.img_locandina IS NOT NULL;
+      AND s.deleted_at IS NULL;
 SQL
         );
     }

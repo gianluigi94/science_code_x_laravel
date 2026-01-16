@@ -27,14 +27,9 @@ class FilmTraduzioneResource extends JsonResource
             'id_film_traduzione' => $this->id_film_traduzione,
             'id_film'            => $this->id_film,
             'id_lingua'          => $this->id_lingua,
-
-            'img_titolo'         => $this->img_titolo,
             'titolo'             => $this->titolo,
-
             'sottotitolo'        => $this->sottotitolo,
-            'trailer'            => $this->trailer,
             'descrizione'        => $this->descrizione,
-            'img_locandina'      => $this->img_locandina,
         ];
     }
 }

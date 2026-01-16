@@ -19,7 +19,6 @@ class FilmModel extends Model
         'id_regista',
         'anno',
         'durata',
-        'img_sfondo',
         'id_streaming_file',
         'novita',
     ];

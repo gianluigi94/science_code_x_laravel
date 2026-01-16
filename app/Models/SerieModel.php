@@ -20,7 +20,6 @@ class SerieModel extends Model
         'anno',
         'numero_stagioni',
         'numero_episodi',
-        'img_sfondo',
         'novita',
     ];
 

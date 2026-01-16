@@ -19,13 +19,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_film');
             $table->unsignedBigInteger('id_lingua');
 
-            $table->string('img_titolo', 255)->nullable();
             $table->string('titolo', 255);
 
             $table->string('sottotitolo', 255)->nullable();
-            $table->string('trailer', 512)->nullable();
             $table->text('descrizione')->nullable();
-            $table->string('img_locandina', 512)->nullable();
 
             $table->foreign('id_film')
                   ->references('id_film')->on('film')

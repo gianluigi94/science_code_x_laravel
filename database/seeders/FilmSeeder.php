@@ -57,7 +57,7 @@ class FilmSeeder extends Seeder
                     : 1; // Se non lo trovo, uso 1 come fallback
 
                 $anno = isset($p['anno']) ? (int) $p['anno'] : 2000; // prendo l'anno dal JSON oppure uso 2000 come fallback
-                $imgSfondo = $p['img_hero'] ?? 'placeholder.webp'; // prendo l'immagine di sfondo oppure uso un placeholder
+
                 $durata = $DEFAULT_DURATA_MINUTI; // Imposto la durata di default (verrà eventualmente aggiornata altrove)
 
                 $descrizione = 'film.' . $slug; // costruisco la descrizione tecnica del film (usata anche per il mapping streaming)
@@ -67,7 +67,6 @@ class FilmSeeder extends Seeder
                     'id_regista'        => $idRegista,
                     'anno'              => $anno,
                     'durata'            => $durata,
-                    'img_sfondo'        => $imgSfondo,
                     'id_streaming_file' => $idStreamingFile,
                     'novita'            => in_array($slug, $novitaSlugs, true),
                     'descrizione'       => $descrizione,

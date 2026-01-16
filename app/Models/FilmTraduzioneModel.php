@@ -17,14 +17,9 @@ class FilmTraduzioneModel extends Model
     protected $fillable = [
         'id_film',
         'id_lingua',
-
-        'img_titolo',
         'titolo',
-
         'sottotitolo',
-        'trailer',
         'descrizione',
-        'img_locandina',
     ];
 
     /**

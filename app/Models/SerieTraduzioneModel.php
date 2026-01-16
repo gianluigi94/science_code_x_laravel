@@ -17,14 +17,9 @@ class SerieTraduzioneModel extends Model
     protected $fillable = [
         'id_serie',
         'id_lingua',
-
-        'img_titolo',
         'titolo',
-
         'sottotitolo',
-        'trailer',
         'descrizione',
-        'img_locandina',
     ];
 
     /**

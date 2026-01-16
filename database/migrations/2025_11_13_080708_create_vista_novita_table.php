@@ -32,9 +32,7 @@ CREATE VIEW vista_novita AS
     SELECT
         f.descrizione      AS descrizione,
         ft.titolo          AS titolo,
-        ft.img_titolo      AS img_titolo,
         ft.sottotitolo     AS sottotitolo,
-        ft.trailer         AS trailer,
         l.codice           AS lingua
     FROM film f
     INNER JOIN film_traduzioni ft
@@ -49,9 +47,7 @@ CREATE VIEW vista_novita AS
     SELECT
         s.descrizione      AS descrizione,
         st.titolo          AS titolo,
-        st.img_titolo      AS img_titolo,
         st.sottotitolo     AS sottotitolo,
-        st.trailer         AS trailer,
         l.codice           AS lingua
     FROM serie s
     INNER JOIN serie_traduzioni st

@@ -18,9 +18,7 @@ class VnovitaResource extends JsonResource
         return [
             'descrizione' => $this->descrizione,
             'titolo'      => $this->titolo,
-            'img_titolo'  => $this->img_titolo,
             'sottotitolo' => $this->sottotitolo,
-            'trailer'     => $this->trailer,
             'lingua'      => $this->lingua,
         ];
     }

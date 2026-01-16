@@ -27,14 +27,9 @@ class SerieTraduzioneResource extends JsonResource
             'id_serie_traduzione' => $this->id_serie_traduzione,
             'id_serie'            => $this->id_serie,
             'id_lingua'           => $this->id_lingua,
-
-            'img_titolo'          => $this->img_titolo,
             'titolo'              => $this->titolo,
-
             'sottotitolo'         => $this->sottotitolo,
-            'trailer'             => $this->trailer,
             'descrizione'         => $this->descrizione,
-            'img_locandina'       => $this->img_locandina,
         ];
     }
 }
