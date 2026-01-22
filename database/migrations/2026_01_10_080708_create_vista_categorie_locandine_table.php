@@ -31,7 +31,8 @@ CREATE VIEW vista_categorie_locandine AS
          WHEN f.descrizione LIKE 'film.%' THEN REPLACE(f.descrizione, 'film.', '')
          ELSE f.descrizione
        END AS slug,
-        l.codice            AS lingua
+        l.codice            AS lingua,
+        ft.sottotitolo  AS sottotitolo
     FROM categoria_film cf
        INNER JOIN film f
        ON f.id_film = cf.id_film
@@ -54,7 +55,8 @@ CREATE VIEW vista_categorie_locandine AS
          WHEN s.descrizione LIKE 'serie.%' THEN REPLACE(s.descrizione, 'serie.', '')
          ELSE s.descrizione
        END AS slug,
-        l.codice            AS lingua
+        l.codice            AS lingua,
+        st.sottotitolo  AS sottotitolo
     FROM categoria_serie cs
        INNER JOIN serie s
        ON s.id_serie = cs.id_serie

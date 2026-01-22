@@ -21,6 +21,7 @@ class VcategorieLocandineResource extends JsonResource
             'id_contenuto'  => $this->id_contenuto,
             'slug'          => $this->slug,
             'lingua'        => $this->lingua,
+            'sottotitolo'   => $this->sottotitolo,
         ];
     }
 }

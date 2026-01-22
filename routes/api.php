@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\v1\LogoutController;
 use App\Http\Controllers\v1\VnovitaController;
 use App\Http\Controllers\v1\VcategorieLocandineController;
-
+use App\Http\Controllers\v1\CatalogoRigheController;
 
 if (!defined('_VERS')) {
     define('_VERS', 'v1');
@@ -78,6 +78,7 @@ Route::get(_VERS . "/tassi-cambio/{tassocambio}", [TassoCambioController::class,
 Route::get(_VERS . '/traduzioni-lingua/{codiceLingua}', [TraduzioniController::class, 'perLingua']);
 Route::get(_VERS . '/logout', [LogoutController::class, 'logout']);
 
+Route::get(_VERS . '/catalogo-righe', [CatalogoRigheController::class, 'index']);
 
 
 
